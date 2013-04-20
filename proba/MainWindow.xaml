@@ -1,0 +1,54 @@
+﻿<Window x:Class="proba.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:my="clr-namespace:proba" Loaded="Window_Loaded">
+    <Window.Resources>
+        <CollectionViewSource x:Key="singleHistogramSetViewSource" d:DesignSource="{d:DesignInstance my:SingleHistogramSet, CreateList=True}" />
+        <CollectionViewSource x:Key="variableSetViewSource" d:DesignSource="{d:DesignInstance my:VariableSet, CreateList=True}" />
+        <CollectionViewSource x:Key="singleLogSetViewSource" d:DesignSource="{d:DesignInstance my:SingleLogSet, CreateList=True}" />
+    </Window.Resources>
+    <Grid DataContext="{StaticResource variableSetViewSource}">
+        <DockPanel>
+            <DataGrid DockPanel.Dock="Left" IsSynchronizedWithCurrentItem="True" AutoGenerateColumns="False" EnableRowVirtualization="True"  ItemsSource="{Binding}" Name="variableSetDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected" Width="181">
+                <DataGrid.Columns>
+                    <DataGridTextColumn x:Name="idColumn" Binding="{Binding Path=Id}" Header="Id" Width="SizeToHeader" />
+                    <DataGridTextColumn x:Name="nameColumn" Binding="{Binding Path=Name}" Header="Name" Width="SizeToHeader" />
+                    <DataGridTextColumn x:Name="typeColumn" Binding="{Binding Path=Type}" Header="Type" Width="SizeToHeader" />
+                    <DataGridCheckBoxColumn x:Name="dataLoggingEnabledColumn" Binding="{Binding Path=DataLoggingEnabled}" Header="Data Logging Enabled" Width="SizeToHeader" />
+                </DataGrid.Columns>
+            </DataGrid>
+            <DataGrid DockPanel.Dock="Top" Height="200" AutoGenerateColumns="False" EnableRowVirtualization="True"   ItemsSource="{Binding Path=SingleLogSet}"  Name="singleLogSetDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected" >
+                <DataGrid.Columns>
+                    <DataGridTextColumn x:Name="idColumn1" Binding="{Binding Path=Id}" Header="Id" Width="SizeToHeader" />
+                    <DataGridTextColumn x:Name="singleValueColumn" Binding="{Binding Path=SingleValue}" Header="Single Value" Width="SizeToHeader" />
+                    <DataGridTextColumn  Binding="{Binding Path=TimeStamp}" Header="Time Stamp" />
+                    <DataGridTextColumn  Binding="{Binding Path=TimeStamp.Millisecond}" Header="Time Stamp" />
+                    <DataGridTemplateColumn x:Name="timeStampColumn" Header="Time Stamp" Width="SizeToHeader">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <DatePicker SelectedDate="{Binding Path=TimeStamp, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn x:Name="variableIdColumn" Binding="{Binding Path=VariableId}" Header="Variable Id" Width="SizeToHeader" />
+                </DataGrid.Columns>
+            </DataGrid>
+            <DataGrid AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Path=SingleHistogramSet}" Name="singleHistogramSetDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected" >
+                <DataGrid.Columns>
+                    <DataGridTextColumn x:Name="idColumn2" Binding="{Binding Path=Id}" Header="Id" Width="SizeToHeader" />
+                    <DataGridTextColumn x:Name="singleValueColumn1" Binding="{Binding Path=SingleValue}" Header="Single Value" Width="SizeToHeader" />
+                    <DataGridTextColumn  Binding="{Binding Path=TimeStamp}" Header="Time Stamp" />
+                    <DataGridTextColumn  Binding="{Binding Path=TimeStamp.Millisecond}" Header="Time Stamp" />
+                    <DataGridTemplateColumn x:Name="timeStampColumn1" Header="Time Stamp" Width="SizeToHeader">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <DatePicker SelectedDate="{Binding Path=TimeStamp, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn x:Name="variableIdColumn1" Binding="{Binding Path=VariableId}" Header="Variable Id" Width="SizeToHeader" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+    </Grid>
+</Window>

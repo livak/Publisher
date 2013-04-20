@@ -1,0 +1,50 @@
+﻿<Window x:Class="Publisher.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+        Title="PowerMonitorig Publisher" Height="350" Width="525" Closing="Window_Closing">
+    <Window.Resources>
+        <CollectionViewSource x:Key="myView" Source="{Binding}" >
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="BrowserItem.Name" Direction="Ascending"></scm:SortDescription>
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+    </Window.Resources>
+
+    <Grid DataContext="{StaticResource myView}">
+        <DockPanel>
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                <ComboBox Name="cbxProcesToAdd" Width="150" IsEditable="True" Text="Select process to add" >
+                </ComboBox>
+                <Button Name="btnAddProcess" Click="btnAddProcess_Click">Add process</Button>
+            </StackPanel>
+            <StackPanel DockPanel.Dock="Top" Width="300" Orientation="Horizontal" HorizontalAlignment="Left">
+                <Label> Name</Label>
+                <Label Margin="15,0,50,0">Value</Label>
+                <Label>Refresh Rate</Label>
+            </StackPanel>
+            <ListBox  ItemsSource="{Binding}" IsSynchronizedWithCurrentItem="True" DockPanel.Dock="Left" Width="300">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Path=BrowserItem.Name}" Width="60" ></TextBlock>
+                            <TextBlock Text="{Binding Path=CurrentValueSingle}" Width="80"></TextBlock>
+                            <TextBlock Text="{Binding Path=RefreshRate}"></TextBlock>
+                            
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <StackPanel>
+                <Label>Location:</Label>
+                <Label Content="{Binding Path=BrowserItem.Path}"></Label>
+                <Label>Quality:</Label>
+                <Label Content="{Binding Path=Quality}"></Label>
+                <Label>Last Update:</Label>
+                <Label Content="{Binding Path=TimeStamp}" ContentStringFormat="hh:mm:ss"></Label>
+            </StackPanel>
+        </DockPanel>
+        
+    </Grid>
+</Window>

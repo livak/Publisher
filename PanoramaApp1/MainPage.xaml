@@ -1,0 +1,219 @@
+﻿<phone:PhoneApplicationPage 
+    x:Class="PanoramaApp1.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="800" 
+    d:DataContext="{d:DesignData SampleData/MainViewModelSampleData.xaml}"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait"  Orientation="Portrait"
+    
+    xmlns:local="clr-namespace:WpfClient"
+    xmlns:loc="clr-namespace:PanoramaApp1"
+    xmlns:controlsPrimitives="clr-namespace:Microsoft.Phone.Controls.Primitives;assembly=Microsoft.Phone.Controls"
+    
+    xmlns:charting="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+    xmlns:chartingprimitives="clr-namespace:System.Windows.Controls.DataVisualization.Charting.Primitives;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+    xmlns:datavis="clr-namespace:System.Windows.Controls.DataVisualization;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+    
+    shell:SystemTray.IsVisible="False">
+    
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.Resources>
+            <Style x:Key="NonParalaxPanorama" TargetType="controls:Panorama">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="controls:Panorama">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <loc:NoParalaxBackgroundLayer x:Name="BackgroundLayer" 
+                 HorizontalAlignment="Left" Grid.RowSpan="2">
+                                    <Border x:Name="background" 
+                    Background="{TemplateBinding Background}" 
+                    CacheMode="BitmapCache"/>
+                                </loc:NoParalaxBackgroundLayer>
+                                <loc:NoParalaxTitleLayer x:Name="TitleLayer" 
+                 CacheMode="BitmapCache" 
+                 ContentTemplate="{TemplateBinding TitleTemplate}" 
+                 Content="{TemplateBinding Title}" 
+                 FontSize="187" 
+                 FontFamily="{StaticResource PhoneFontFamilyLight}" 
+                 HorizontalAlignment="Left" 
+                 Margin="10,-76,0,9" Grid.Row="0"/>
+                                <controlsPrimitives:PanningLayer x:Name="ItemsLayer" 
+                 HorizontalAlignment="Left" Grid.Row="1">
+                                    <ItemsPresenter x:Name="items"/>
+                                </controlsPrimitives:PanningLayer>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </Grid.Resources>
+ 
+        <!--Panorama control-->
+        <controls:Panorama Title="Power monitoring" Style="{StaticResource NonParalaxPanorama}">
+            <controls:Panorama.Background>
+                <ImageBrush ImageSource="PanoramaBackground.png"/>
+            </controls:Panorama.Background>
+ 
+            <!--Panorama item one-->
+            <controls:PanoramaItem Header="Trenutno:" >
+                <!--Double line list with text wrapping-->
+                <ListBox Margin="0,0,-12,0" ItemsSource="{Binding Items}" SelectionChanged="ListBox_SelectionChanged">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="0,0,0,17" Width="432" Height="78">
+                                <TextBlock Text="{Binding Path=Name}" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                                <TextBlock Text="{Binding Path=CurrentValue}" TextWrapping="Wrap" Margin="12,-6,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </controls:PanoramaItem>
+ 
+            <!--Panorama item two-->
+            <!--Use 'Orientation="Horizontal"' to enable a panel that lays out horizontally-->
+            <controls:PanoramaItem Header="Alarm:">
+                <!--Double line list with image placeholder and text wrapping-->
+
+                <Border CornerRadius="35" Background="#7F000000">
+                    <ListBox  ItemsSource="{Binding TerminalAlarms}"  DoubleTap="ListBox_DoubleTap" >
+                        <ListBox.Resources>
+                            <local:AlarmColorConverter x:Key="AlarmColorConverter"></local:AlarmColorConverter>
+                            <local:AlarmColorConverterRadial x:Key="AlarmColorConverterRadial"></local:AlarmColorConverterRadial>
+                        </ListBox.Resources>
+
+                        <ListBox.ItemTemplate>
+
+                            <DataTemplate>
+                                <Border Margin="15,0,0,10" CornerRadius="20" Background="#7F000000">
+                                    <StackPanel Orientation="Horizontal"  HorizontalAlignment="Right" >
+                                        <!--Replace rectangle with image-->
+                                        <Ellipse Margin="10,0,5,0" Height="35" Width="35" 
+                                                 Fill="{Binding Path=AlarmStausColor, Converter={StaticResource AlarmColorConverterRadial}}"/>
+                                        <StackPanel Width="311">
+
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock 
+                                                    Text="{Binding VariableName}" 
+                                                    Foreground="{Binding Path=AlarmStausColor, Converter={StaticResource AlarmColorConverter}}" 
+                                                    TextWrapping="Wrap" 
+                                                    Style="{StaticResource PhoneTextSubtleStyle}">
+                                                </TextBlock>
+
+                                                <TextBlock Text="{Binding AlarmLevelName }" 
+                                                           Foreground="{Binding Path=AlarmStausColor, Converter={StaticResource AlarmColorConverter}}" 
+                                                           TextWrapping="Wrap" Style="{StaticResource PhoneTextSubtleStyle}"/>
+
+                                            </StackPanel>
+
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock  Style="{StaticResource PhoneTextSubtleStyle}">Max:</TextBlock>
+                                                <TextBlock Text="{Binding MaxValue}" TextWrapping="Wrap" 
+                                                           Style="{StaticResource PhoneTextSubtleStyle}"/>
+
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Style="{StaticResource PhoneTextSubtleStyle}">SetTime:</TextBlock>
+                                                <TextBlock Text="{Binding SetTime}" TextWrapping="Wrap" 
+                                                           Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                </Border>
+            </controls:PanoramaItem>
+
+            <controls:PanoramaItem Header="Trendovi">
+               
+                <!--Double line list with image placeholder and text wrapping-->
+                
+                <controls:PanoramaItem.Resources>
+                    <ControlTemplate x:Key="ChartTemplate" TargetType="charting:Chart">
+                        <Border BorderBrush="Black" BorderThickness="10" Background="Black" Padding="20">
+                            <chartingprimitives:EdgePanel x:Name="ChartArea" Background="Black"></chartingprimitives:EdgePanel>
+                        </Border>
+                    </ControlTemplate>
+                    <Style x:Key="RotateAxisStyle" TargetType="charting:AxisLabel">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="charting:AxisLabel">
+                                    <TextBlock Text="{TemplateBinding FormattedContent}" Padding="0">
+                                        <TextBlock.RenderTransform>
+                                            <RotateTransform CenterX="10" CenterY="20" Angle="-90"/>
+                                        </TextBlock.RenderTransform>
+                                    </TextBlock>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+
+                        <Setter Property="Margin" Value="0,0,-30,0"></Setter>
+
+                        <!--string format-->                      
+                        <Setter Property="StringFormat" Value="{}{0:hh:mm}"></Setter>
+                    </Style>
+                </controls:PanoramaItem.Resources>
+                <Border CornerRadius="35" Background="Black">
+                    <charting:Chart Margin="0,20,0,30"  Template="{StaticResource ChartTemplate}" LegendTitle="Legenda" Background="Black">
+
+                        <charting:ColumnSeries ItemsSource="{Binding Histogram}" 
+                                               IndependentValuePath="TimeStamp" DependentValuePath="SingleValue">
+                            <charting:ColumnSeries.DataPointStyle>
+                                <Style TargetType="charting:ColumnDataPoint">
+                                    <Setter Property="Background" Value="Green"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="charting:ColumnDataPoint">
+                                                <Rectangle Fill="Green" RadiusX="3" RadiusY="3" />
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </charting:ColumnSeries.DataPointStyle>
+                        </charting:ColumnSeries>
+
+
+
+                        <charting:Chart.Axes>
+                            <charting:DateTimeAxis  Name="axisDate" AxisLabelStyle="{StaticResource RotateAxisStyle}"  Title="Raspodjela 15' opterećenje"  Orientation="X" Background="Black" FontSize="12"  ShowGridLines="False" IntervalType="Minutes" Interval="{Binding Path=HistogramInterval}">
+                                <charting:DateTimeAxis.TitleStyle>
+                                    <Style TargetType="datavis:Title">
+                                        <Setter Property="FontSize" Value="15"></Setter>
+                                        <Setter Property="Margin" Value="0,40,0,0"></Setter>
+                                    </Style>
+                                </charting:DateTimeAxis.TitleStyle>
+                            </charting:DateTimeAxis>
+                            <charting:LinearAxis Title="15' Ptot ( kW )"  Orientation="Y" ShowGridLines="True" Background="Black" FontSize="14" FontWeight="Bold" FontFamily="Txt">
+                                <charting:LinearAxis.AxisLabelStyle>
+                                    <Style TargetType="charting:AxisLabel">
+                                        <Setter Property="Foreground" Value="Red"></Setter>
+                                    </Style>
+                                </charting:LinearAxis.AxisLabelStyle>
+                            </charting:LinearAxis>
+                        </charting:Chart.Axes>
+                    </charting:Chart>
+
+                </Border>
+
+
+            </controls:PanoramaItem>
+        </controls:Panorama>
+        
+    </Grid>
+</phone:PhoneApplicationPage>

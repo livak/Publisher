@@ -1,0 +1,565 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="PowerMonitoringModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+  <EntityContainer Name="PowerMonitoringModelStoreContainer">
+    <EntitySet Name="AlarmConfigSet" EntityType="PowerMonitoringModel.Store.AlarmConfigSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="AlarmLogSet" EntityType="PowerMonitoringModel.Store.AlarmLogSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="AlarmTerminalSet" EntityType="PowerMonitoringModel.Store.AlarmTerminalSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="DoubleLogSet" EntityType="PowerMonitoringModel.Store.DoubleLogSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="SingleLogSet" EntityType="PowerMonitoringModel.Store.SingleLogSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="VariableSet" EntityType="PowerMonitoringModel.Store.VariableSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="SingleHistogramSet" EntityType="PowerMonitoringModel.Store.SingleHistogramSet" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_AlarmConfigAlarmLog" Association="PowerMonitoringModel.Store.FK_AlarmConfigAlarmLog">
+      <End Role="AlarmConfigSet" EntitySet="AlarmConfigSet" />
+      <End Role="AlarmLogSet" EntitySet="AlarmLogSet" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AlarmConfigAlarmTerminal" Association="PowerMonitoringModel.Store.FK_AlarmConfigAlarmTerminal">
+      <End Role="AlarmConfigSet" EntitySet="AlarmConfigSet" />
+      <End Role="AlarmTerminalSet" EntitySet="AlarmTerminalSet" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VariableAlarmConfig" Association="PowerMonitoringModel.Store.FK_VariableAlarmConfig">
+      <End Role="VariableSet" EntitySet="VariableSet" />
+      <End Role="AlarmConfigSet" EntitySet="AlarmConfigSet" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VariableDoubleLog" Association="PowerMonitoringModel.Store.FK_VariableDoubleLog">
+      <End Role="VariableSet" EntitySet="VariableSet" />
+      <End Role="DoubleLogSet" EntitySet="DoubleLogSet" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VariableSingleLog" Association="PowerMonitoringModel.Store.FK_VariableSingleLog">
+      <End Role="VariableSet" EntitySet="VariableSet" />
+      <End Role="SingleLogSet" EntitySet="SingleLogSet" />
+    </AssociationSet>
+    <AssociationSet Name="VariableSingleHistogram" Association="PowerMonitoringModel.Store.VariableSingleHistogram">
+      <End Role="Variable" EntitySet="VariableSet" />
+      <End Role="SingleHistogram" EntitySet="SingleHistogramSet" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="AlarmConfigSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="HIHI_Enable" Type="bit" Nullable="false" />
+    <Property Name="HIHI_Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="HIHI_LevelChange" Type="float" Nullable="false" />
+    <Property Name="HIHI_Delay" Type="int" Nullable="false" />
+    <Property Name="HI_Enable" Type="bit" Nullable="false" />
+    <Property Name="HI_Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="HI_LevelChange" Type="float" Nullable="false" />
+    <Property Name="HI_Delay" Type="int" Nullable="false" />
+    <Property Name="LO_Enable" Type="bit" Nullable="false" />
+    <Property Name="LO_Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="LO_LevelChange" Type="float" Nullable="false" />
+    <Property Name="LO_Delay" Type="int" Nullable="false" />
+    <Property Name="LOLO_Enabled" Type="bit" Nullable="false" />
+    <Property Name="LOLO_Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="LOLO_LevelChange" Type="float" Nullable="false" />
+    <Property Name="LOLO_Delay" Type="int" Nullable="false" />
+    <Property Name="Enabled" Type="bit" Nullable="false" />
+    <Property Name="Location" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AlarmLogSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AlarmLevelName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Action" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="TimeStamp" Type="datetime" Nullable="false" />
+    <Property Name="AlarmConfigId" Type="int" Nullable="false" />
+    <Property Name="CurrentValue" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AlarmTerminalSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Active" Type="bit" Nullable="false" />
+    <Property Name="Acknowledged" Type="bit" Nullable="false" />
+    <Property Name="AlarmLevelName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="MaxValue" Type="real" Nullable="false" />
+    <Property Name="SetTime" Type="datetime" Nullable="false" />
+    <Property Name="MaxValueTime" Type="datetime" Nullable="false" />
+    <Property Name="DeactivatedTime" Type="datetime" Nullable="true" />
+    <Property Name="SetPoint" Type="float" Nullable="false" />
+    <Property Name="Priority" Type="int" Nullable="false" />
+    <Property Name="AlarmConfig_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="DoubleLogSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DoubleValue" Type="float" Nullable="false" />
+    <Property Name="TimeStamp" Type="datetime" Nullable="false" />
+    <Property Name="VariableId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SingleLogSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SingleValue" Type="real" Nullable="false" />
+    <Property Name="TimeStamp" Type="datetime" Nullable="false" />
+    <Property Name="VariableId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="VariableSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Type" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="DataLoggingEnabled" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SingleHistogramSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SingleValue" Type="real" Nullable="false" />
+    <Property Name="TimeStamp" Type="datetime" Nullable="false" />
+    <Property Name="VariableId" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_AlarmConfigAlarmLog">
+    <End Role="AlarmConfigSet" Type="PowerMonitoringModel.Store.AlarmConfigSet" Multiplicity="1" />
+    <End Role="AlarmLogSet" Type="PowerMonitoringModel.Store.AlarmLogSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AlarmConfigSet">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AlarmLogSet">
+        <PropertyRef Name="AlarmConfigId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AlarmConfigAlarmTerminal">
+    <End Role="AlarmConfigSet" Type="PowerMonitoringModel.Store.AlarmConfigSet" Multiplicity="1" />
+    <End Role="AlarmTerminalSet" Type="PowerMonitoringModel.Store.AlarmTerminalSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AlarmConfigSet">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AlarmTerminalSet">
+        <PropertyRef Name="AlarmConfig_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VariableAlarmConfig">
+    <End Role="VariableSet" Type="PowerMonitoringModel.Store.VariableSet" Multiplicity="1" />
+    <End Role="AlarmConfigSet" Type="PowerMonitoringModel.Store.AlarmConfigSet" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="VariableSet">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AlarmConfigSet">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VariableDoubleLog">
+    <End Role="VariableSet" Type="PowerMonitoringModel.Store.VariableSet" Multiplicity="1" />
+    <End Role="DoubleLogSet" Type="PowerMonitoringModel.Store.DoubleLogSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="VariableSet">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DoubleLogSet">
+        <PropertyRef Name="VariableId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VariableSingleLog">
+    <End Role="VariableSet" Type="PowerMonitoringModel.Store.VariableSet" Multiplicity="1" />
+    <End Role="SingleLogSet" Type="PowerMonitoringModel.Store.SingleLogSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="VariableSet">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="SingleLogSet">
+        <PropertyRef Name="VariableId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="VariableSingleHistogram">
+    <End Role="Variable" Type="PowerMonitoringModel.Store.VariableSet" Multiplicity="1" />
+    <End Role="SingleHistogram" Type="PowerMonitoringModel.Store.SingleHistogramSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Variable">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="SingleHistogram">
+        <PropertyRef Name="VariableId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2008/09/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="PowerMonitoringModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="PowerMonitoringModelContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AlarmConfigSet" EntityType="PowerMonitoringModel.AlarmConfig" />
+          <EntitySet Name="AlarmLogSet" EntityType="PowerMonitoringModel.AlarmLog" />
+          <EntitySet Name="AlarmTerminalSet" EntityType="PowerMonitoringModel.AlarmTerminal" />
+          <EntitySet Name="DoubleLogSet" EntityType="PowerMonitoringModel.DoubleLog" />
+          <EntitySet Name="SingleLogSet" EntityType="PowerMonitoringModel.SingleLog" />
+          <EntitySet Name="VariableSet" EntityType="PowerMonitoringModel.Variable" />
+          <AssociationSet Name="FK_AlarmConfigAlarmLog" Association="PowerMonitoringModel.FK_AlarmConfigAlarmLog">
+            <End Role="AlarmConfigSet" EntitySet="AlarmConfigSet" />
+            <End Role="AlarmLogSet" EntitySet="AlarmLogSet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AlarmConfigAlarmTerminal" Association="PowerMonitoringModel.FK_AlarmConfigAlarmTerminal">
+            <End Role="AlarmConfigSet" EntitySet="AlarmConfigSet" />
+            <End Role="AlarmTerminalSet" EntitySet="AlarmTerminalSet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VariableAlarmConfig" Association="PowerMonitoringModel.FK_VariableAlarmConfig">
+            <End Role="VariableSet" EntitySet="VariableSet" />
+            <End Role="AlarmConfigSet" EntitySet="AlarmConfigSet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VariableDoubleLog" Association="PowerMonitoringModel.FK_VariableDoubleLog">
+            <End Role="VariableSet" EntitySet="VariableSet" />
+            <End Role="DoubleLogSet" EntitySet="DoubleLogSet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VariableSingleLog" Association="PowerMonitoringModel.FK_VariableSingleLog">
+            <End Role="VariableSet" EntitySet="VariableSet" />
+            <End Role="SingleLogSet" EntitySet="SingleLogSet" />
+          </AssociationSet>
+          <EntitySet Name="SingleHistogramSet" EntityType="PowerMonitoringModel.SingleHistogram" />
+          <AssociationSet Name="VariableSingleHistogram" Association="PowerMonitoringModel.VariableSingleHistogram">
+            <End Role="Variable" EntitySet="VariableSet" />
+            <End Role="SingleHistogram" EntitySet="SingleHistogramSet" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="AlarmConfig">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Boolean" Name="HIHI_Enable" Nullable="false" />
+          <Property Type="String" Name="HIHI_Name" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="Double" Name="HIHI_LevelChange" Nullable="false" />
+          <Property Type="Int32" Name="HIHI_Delay" Nullable="false" />
+          <Property Type="Boolean" Name="HI_Enable" Nullable="false" />
+          <Property Type="String" Name="HI_Name" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="Double" Name="HI_LevelChange" Nullable="false" />
+          <Property Type="Int32" Name="HI_Delay" Nullable="false" />
+          <Property Type="Boolean" Name="LO_Enable" Nullable="false" />
+          <Property Type="String" Name="LO_Name" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="Double" Name="LO_LevelChange" Nullable="false" />
+          <Property Type="Int32" Name="LO_Delay" Nullable="false" />
+          <Property Type="Boolean" Name="LOLO_Enabled" Nullable="false" />
+          <Property Type="String" Name="LOLO_Name" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="Double" Name="LOLO_LevelChange" Nullable="false" />
+          <Property Type="Int32" Name="LOLO_Delay" Nullable="false" />
+          <Property Type="Boolean" Name="Enabled" Nullable="false" />
+          <Property Type="String" Name="Location" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AlarmLogSet" Relationship="PowerMonitoringModel.FK_AlarmConfigAlarmLog" FromRole="AlarmConfigSet" ToRole="AlarmLogSet" />
+          <NavigationProperty Name="AlarmTerminalSet" Relationship="PowerMonitoringModel.FK_AlarmConfigAlarmTerminal" FromRole="AlarmConfigSet" ToRole="AlarmTerminalSet" />
+          <NavigationProperty Name="VariableSet" Relationship="PowerMonitoringModel.FK_VariableAlarmConfig" FromRole="AlarmConfigSet" ToRole="VariableSet" />
+        </EntityType>
+        <EntityType Name="AlarmLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="AlarmLevelName" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Action" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="TimeStamp" Nullable="false" />
+          <Property Type="Int32" Name="AlarmConfigId" Nullable="false" />
+          <Property Type="String" Name="CurrentValue" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AlarmConfigSet" Relationship="PowerMonitoringModel.FK_AlarmConfigAlarmLog" FromRole="AlarmLogSet" ToRole="AlarmConfigSet" />
+        </EntityType>
+        <EntityType Name="AlarmTerminal">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Boolean" Name="Active" Nullable="false" />
+          <Property Type="Boolean" Name="Acknowledged" Nullable="false" />
+          <Property Type="String" Name="AlarmLevelName" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="Single" Name="MaxValue" Nullable="false" />
+          <Property Type="DateTime" Name="SetTime" Nullable="false" />
+          <Property Type="DateTime" Name="MaxValueTime" Nullable="false" />
+          <Property Type="DateTime" Name="DeactivatedTime" />
+          <Property Type="Double" Name="SetPoint" Nullable="false" />
+          <Property Type="Int32" Name="Priority" Nullable="false" />
+          <Property Type="Int32" Name="AlarmConfig_Id" Nullable="false" />
+          <NavigationProperty Name="AlarmConfigSet" Relationship="PowerMonitoringModel.FK_AlarmConfigAlarmTerminal" FromRole="AlarmTerminalSet" ToRole="AlarmConfigSet" />
+        </EntityType>
+        <EntityType Name="DoubleLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Double" Name="DoubleValue" Nullable="false" />
+          <Property Type="DateTime" Name="TimeStamp" Nullable="false" />
+          <Property Type="Int32" Name="VariableId" Nullable="false" />
+          <NavigationProperty Name="VariableSet" Relationship="PowerMonitoringModel.FK_VariableDoubleLog" FromRole="DoubleLogSet" ToRole="VariableSet" />
+        </EntityType>
+        <EntityType Name="SingleLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Single" Name="SingleValue" Nullable="false" />
+          <Property Type="DateTime" Name="TimeStamp" Nullable="false" />
+          <Property Type="Int32" Name="VariableId" Nullable="false" />
+          <NavigationProperty Name="VariableSet" Relationship="PowerMonitoringModel.FK_VariableSingleLog" FromRole="SingleLogSet" ToRole="VariableSet" />
+        </EntityType>
+        <EntityType Name="Variable">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Type" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="DataLoggingEnabled" Nullable="false" />
+          <NavigationProperty Name="AlarmConfigSet" Relationship="PowerMonitoringModel.FK_VariableAlarmConfig" FromRole="VariableSet" ToRole="AlarmConfigSet" />
+          <NavigationProperty Name="DoubleLogSet" Relationship="PowerMonitoringModel.FK_VariableDoubleLog" FromRole="VariableSet" ToRole="DoubleLogSet" />
+          <NavigationProperty Name="SingleLogSet" Relationship="PowerMonitoringModel.FK_VariableSingleLog" FromRole="VariableSet" ToRole="SingleLogSet" />
+          <NavigationProperty Name="SingleHistogram" Relationship="PowerMonitoringModel.VariableSingleHistogram" FromRole="Variable" ToRole="SingleHistogram" />
+        </EntityType>
+        <Association Name="FK_AlarmConfigAlarmLog">
+          <End Type="PowerMonitoringModel.AlarmConfig" Role="AlarmConfigSet" Multiplicity="1" />
+          <End Type="PowerMonitoringModel.AlarmLog" Role="AlarmLogSet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AlarmConfigSet">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AlarmLogSet">
+              <PropertyRef Name="AlarmConfigId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AlarmConfigAlarmTerminal">
+          <End Type="PowerMonitoringModel.AlarmConfig" Role="AlarmConfigSet" Multiplicity="1" />
+          <End Type="PowerMonitoringModel.AlarmTerminal" Role="AlarmTerminalSet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AlarmConfigSet">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AlarmTerminalSet">
+              <PropertyRef Name="AlarmConfig_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VariableAlarmConfig">
+          <End Type="PowerMonitoringModel.Variable" Role="VariableSet" Multiplicity="1" />
+          <End Type="PowerMonitoringModel.AlarmConfig" Role="AlarmConfigSet" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="VariableSet">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AlarmConfigSet">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VariableDoubleLog">
+          <End Type="PowerMonitoringModel.Variable" Role="VariableSet" Multiplicity="1" />
+          <End Type="PowerMonitoringModel.DoubleLog" Role="DoubleLogSet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="VariableSet">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DoubleLogSet">
+              <PropertyRef Name="VariableId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VariableSingleLog">
+          <End Type="PowerMonitoringModel.Variable" Role="VariableSet" Multiplicity="1" />
+          <End Type="PowerMonitoringModel.SingleLog" Role="SingleLogSet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="VariableSet">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SingleLogSet">
+              <PropertyRef Name="VariableId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="SingleHistogram">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Single" Name="SingleValue" Nullable="false" />
+          <Property Type="DateTime" Name="TimeStamp" Nullable="false" />
+          <NavigationProperty Name="Variable" Relationship="PowerMonitoringModel.VariableSingleHistogram" FromRole="SingleHistogram" ToRole="Variable" />
+          <Property Type="Int32" Name="VariableId" Nullable="false" />
+        </EntityType>
+        <Association Name="VariableSingleHistogram">
+          <End Type="PowerMonitoringModel.Variable" Role="Variable" Multiplicity="1" />
+          <End Type="PowerMonitoringModel.SingleHistogram" Role="SingleHistogram" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Variable">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SingleHistogram">
+              <PropertyRef Name="VariableId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="PowerMonitoringModelStoreContainer" CdmEntityContainer="PowerMonitoringModelContainer">
+    <EntitySetMapping Name="AlarmConfigSet">
+      <EntityTypeMapping TypeName="IsTypeOf(PowerMonitoringModel.AlarmConfig)">
+        <MappingFragment StoreEntitySet="AlarmConfigSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="HIHI_Enable" ColumnName="HIHI_Enable" />
+          <ScalarProperty Name="HIHI_Name" ColumnName="HIHI_Name" />
+          <ScalarProperty Name="HIHI_LevelChange" ColumnName="HIHI_LevelChange" />
+          <ScalarProperty Name="HIHI_Delay" ColumnName="HIHI_Delay" />
+          <ScalarProperty Name="HI_Enable" ColumnName="HI_Enable" />
+          <ScalarProperty Name="HI_Name" ColumnName="HI_Name" />
+          <ScalarProperty Name="HI_LevelChange" ColumnName="HI_LevelChange" />
+          <ScalarProperty Name="HI_Delay" ColumnName="HI_Delay" />
+          <ScalarProperty Name="LO_Enable" ColumnName="LO_Enable" />
+          <ScalarProperty Name="LO_Name" ColumnName="LO_Name" />
+          <ScalarProperty Name="LO_LevelChange" ColumnName="LO_LevelChange" />
+          <ScalarProperty Name="LO_Delay" ColumnName="LO_Delay" />
+          <ScalarProperty Name="LOLO_Enabled" ColumnName="LOLO_Enabled" />
+          <ScalarProperty Name="LOLO_Name" ColumnName="LOLO_Name" />
+          <ScalarProperty Name="LOLO_LevelChange" ColumnName="LOLO_LevelChange" />
+          <ScalarProperty Name="LOLO_Delay" ColumnName="LOLO_Delay" />
+          <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+          <ScalarProperty Name="Location" ColumnName="Location" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AlarmLogSet">
+      <EntityTypeMapping TypeName="IsTypeOf(PowerMonitoringModel.AlarmLog)">
+        <MappingFragment StoreEntitySet="AlarmLogSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="AlarmLevelName" ColumnName="AlarmLevelName" />
+          <ScalarProperty Name="Action" ColumnName="Action" />
+          <ScalarProperty Name="TimeStamp" ColumnName="TimeStamp" />
+          <ScalarProperty Name="AlarmConfigId" ColumnName="AlarmConfigId" />
+          <ScalarProperty Name="CurrentValue" ColumnName="CurrentValue" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AlarmTerminalSet">
+      <EntityTypeMapping TypeName="IsTypeOf(PowerMonitoringModel.AlarmTerminal)">
+        <MappingFragment StoreEntitySet="AlarmTerminalSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
+          <ScalarProperty Name="Acknowledged" ColumnName="Acknowledged" />
+          <ScalarProperty Name="AlarmLevelName" ColumnName="AlarmLevelName" />
+          <ScalarProperty Name="MaxValue" ColumnName="MaxValue" />
+          <ScalarProperty Name="SetTime" ColumnName="SetTime" />
+          <ScalarProperty Name="MaxValueTime" ColumnName="MaxValueTime" />
+          <ScalarProperty Name="DeactivatedTime" ColumnName="DeactivatedTime" />
+          <ScalarProperty Name="SetPoint" ColumnName="SetPoint" />
+          <ScalarProperty Name="Priority" ColumnName="Priority" />
+          <ScalarProperty Name="AlarmConfig_Id" ColumnName="AlarmConfig_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DoubleLogSet">
+      <EntityTypeMapping TypeName="IsTypeOf(PowerMonitoringModel.DoubleLog)">
+        <MappingFragment StoreEntitySet="DoubleLogSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="DoubleValue" ColumnName="DoubleValue" />
+          <ScalarProperty Name="TimeStamp" ColumnName="TimeStamp" />
+          <ScalarProperty Name="VariableId" ColumnName="VariableId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SingleLogSet">
+      <EntityTypeMapping TypeName="IsTypeOf(PowerMonitoringModel.SingleLog)">
+        <MappingFragment StoreEntitySet="SingleLogSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="SingleValue" ColumnName="SingleValue" />
+          <ScalarProperty Name="TimeStamp" ColumnName="TimeStamp" />
+          <ScalarProperty Name="VariableId" ColumnName="VariableId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VariableSet">
+      <EntityTypeMapping TypeName="IsTypeOf(PowerMonitoringModel.Variable)">
+        <MappingFragment StoreEntitySet="VariableSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="DataLoggingEnabled" ColumnName="DataLoggingEnabled" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SingleHistogramSet">
+      <EntityTypeMapping TypeName="IsTypeOf(PowerMonitoringModel.SingleHistogram)">
+        <MappingFragment StoreEntitySet="SingleHistogramSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="SingleValue" ColumnName="SingleValue" />
+          <ScalarProperty Name="TimeStamp" ColumnName="TimeStamp" />
+          <ScalarProperty Name="VariableId" ColumnName="VariableId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="DefaultDatabaseSchema" Value="dbo" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram Name="PowerMonitoringModel" ZoomLevel="100" >
+        <EntityTypeShape EntityType="PowerMonitoringModel.AlarmConfig" Width="1.5" PointX="7.25" PointY="6.125" Height="5.2494108072916674" />
+        <EntityTypeShape EntityType="PowerMonitoringModel.AlarmLog" Width="1.5" PointX="9.5" PointY="5.5" Height="2.3648893229166674" />
+        <EntityTypeShape EntityType="PowerMonitoringModel.AlarmTerminal" Width="1.625" PointX="9.5" PointY="8.625" Height="3.3263964843750031" />
+        <EntityTypeShape EntityType="PowerMonitoringModel.DoubleLog" Width="1.5" PointX="3.375" PointY="9.75" Height="1.9802864583333388" />
+        <EntityTypeShape EntityType="PowerMonitoringModel.SingleLog" Width="1.5" PointX="5.125" PointY="9.75" Height="1.9802864583333388" />
+        <EntityTypeShape EntityType="PowerMonitoringModel.Variable" Width="1.5" PointX="3.625" PointY="6.25" Height="2.3648893229166674" />
+        <AssociationConnector Association="PowerMonitoringModel.FK_AlarmConfigAlarmLog" >
+          <ConnectorPoint PointX="8.75" PointY="6.9949446614583337" />
+          <ConnectorPoint PointX="9.5" PointY="6.9949446614583337" />
+        </AssociationConnector>
+        <AssociationConnector Association="PowerMonitoringModel.FK_AlarmConfigAlarmTerminal" >
+          <ConnectorPoint PointX="8.75" PointY="9.9997054036458337" />
+          <ConnectorPoint PointX="9.5" PointY="9.9997054036458337" />
+        </AssociationConnector>
+        <AssociationConnector Association="PowerMonitoringModel.FK_VariableAlarmConfig" >
+          <ConnectorPoint PointX="5.125" PointY="7.4324446614583337" />
+          <ConnectorPoint PointX="7.25" PointY="7.4324446614583337" />
+        </AssociationConnector>
+        <AssociationConnector Association="PowerMonitoringModel.FK_VariableDoubleLog" >
+          <ConnectorPoint PointX="4.25" PointY="8.6148893229166674" />
+          <ConnectorPoint PointX="4.25" PointY="9.75" />
+        </AssociationConnector>
+        <AssociationConnector Association="PowerMonitoringModel.FK_VariableSingleLog" >
+          <ConnectorPoint PointX="5.125" PointY="8.0549194921875014" />
+          <ConnectorPoint PointX="5.90625" PointY="8.0549194921875014" />
+          <ConnectorPoint PointX="5.90625" PointY="9.75" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="PowerMonitoringModel.SingleHistogram" Width="1.5" PointX="1.625" PointY="9.75" Height="1.9802864583333317" />
+        <AssociationConnector Association="PowerMonitoringModel.VariableSingleHistogram">
+          <ConnectorPoint PointX="3.625" PointY="7.5285953776041667" />
+          <ConnectorPoint PointX="2.375" PointY="7.5285953776041667" />
+          <ConnectorPoint PointX="2.375" PointY="9.75" />
+        </AssociationConnector>
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

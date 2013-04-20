@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="WebService.Service" BaseTypeListCollapsed="true">
+    <Position X="1.75" Y="1" Width="1.75" />
+    <NestedTypes>
+      <Class Name="WebService.Service.ValueTime" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Service.svc.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Delegate Name="WebService.Service.Usporedi" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Service.svc.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAABAAEAQAAERAAAAAAAUAAAEAQBrAAAAAEAACADQAA=</HashCode>
+      <FileName>Service.svc.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="WebService.VariableDto">
+    <Position X="5.5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Service.svc.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WebService.TerminalDto">
+    <Position X="5.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAQAAAAAAAEAAABAAAAAAAAgAAAgAAAAAgA=</HashCode>
+      <FileName>Service.svc.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WebService.HistogramDto">
+    <Position X="5.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Service.svc.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WebService.ServiceVariable">
+    <Position X="3.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAEAAAAAAAAAAAAAAAAAAAAAAAgAAAAACAAAAAA=</HashCode>
+      <FileName>Service.svc.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="WebService.IService">
+    <Position X="3.75" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQAAAAAAAAAAAEAQAgAAAAAAAAAABQAA=</HashCode>
+      <FileName>Service.svc.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

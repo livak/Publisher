@@ -1,0 +1,50 @@
+﻿<Window x:Class="AlarmConfigurator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="683" Width="916" 
+        xmlns:my="clr-namespace:AlarmConfigurator" 
+        Loaded="Window_Loaded">
+    <Window.Resources>
+    </Window.Resources>
+    <Grid>
+        <DockPanel>
+            <ToolBarTray DockPanel.Dock="Top">
+                <ToolBar>
+                    <Button Name="btnAddAlarmForSelectedVeriable" Click="btnAddAlarmForSelectedVeriable_Click">AddAlarmForSelectedVeriable</Button>
+                    <Separator></Separator>
+                    <Button Name="btnSave" Click="btnSave_Click">Save</Button>
+                </ToolBar>
+            </ToolBarTray>
+            <DataGrid AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" IsSynchronizedWithCurrentItem="True"  Name="variableSetDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected" Width="211">
+                <DataGrid.Columns>
+                    <DataGridTextColumn x:Name="idColumn" Binding="{Binding Path=Id}" Header="Id" IsReadOnly="True" Width="SizeToHeader" />
+                    <DataGridTextColumn x:Name="nameColumn" Binding="{Binding Path=Name}" Header="Name" />
+                    <DataGridTextColumn x:Name="typeColumn" Binding="{Binding Path=Type}" Header="Type" />
+                </DataGrid.Columns>
+            </DataGrid>
+            <DataGrid AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" Name="alarmConfigSetDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected">
+                <DataGrid.Columns>
+                    <DataGridTextColumn x:Name="idColumn1" Binding="{Binding Path=Id}" Header="Id" Width="SizeToHeader" />
+                    <DataGridCheckBoxColumn x:Name="hIHI_EnableColumn" Binding="{Binding Path=HIHI_Enable}" Header="HIHI Enable" Width="SizeToHeader" />
+                    <DataGridTextColumn x:Name="hIHI_NameColumn" Binding="{Binding Path=HIHI_Name}" Header="HIHI Name" Width="SizeToHeader" />
+                    <DataGridTextColumn x:Name="hIHI_LevelChangeColumn" Binding="{Binding Path=HIHI_LevelChange}" Header="HIHI Level Change" Width="SizeToHeader" />
+                    <DataGridTextColumn x:Name="hIHI_DelayColumn" Binding="{Binding Path=HIHI_Delay}" Header="HIHI Delay" Width="SizeToHeader" />
+                    <DataGridCheckBoxColumn x:Name="hI_EnableColumn" Binding="{Binding Path=HI_Enable}" Header="HI Enable" Width="SizeToHeader" />
+                    <DataGridTextColumn x:Name="hI_NameColumn" Binding="{Binding Path=HI_Name}" Header="HI Name" Width="SizeToHeader" />
+                    <DataGridTextColumn x:Name="hI_LevelChangeColumn" Binding="{Binding Path=HI_LevelChange}" Header="HI Level Change" Width="SizeToHeader" />
+                    <DataGridTextColumn x:Name="hI_DelayColumn" Binding="{Binding Path=HI_Delay}" Header="HI Delay" Width="SizeToHeader" />
+                    <DataGridCheckBoxColumn x:Name="lO_EnableColumn" Binding="{Binding Path=LO_Enable}" Header="LO Enable" Width="SizeToHeader" />
+                    <DataGridTextColumn x:Name="lO_NameColumn" Binding="{Binding Path=LO_Name}" Header="LO Name" Width="SizeToHeader" />
+                    <DataGridTextColumn x:Name="lO_LevelChangeColumn" Binding="{Binding Path=LO_LevelChange}" Header="LO Level Change" Width="SizeToHeader" />
+                    <DataGridTextColumn x:Name="lO_DelayColumn" Binding="{Binding Path=LO_Delay}" Header="LO Delay" Width="SizeToHeader" />
+                    <DataGridCheckBoxColumn x:Name="lOLO_EnabledColumn" Binding="{Binding Path=LOLO_Enabled}" Header="LOLO Enabled" Width="SizeToHeader" />
+                    <DataGridTextColumn x:Name="lOLO_NameColumn" Binding="{Binding Path=LOLO_Name}" Header="LOLO Name" Width="SizeToHeader" />
+                    <DataGridTextColumn x:Name="lOLO_LevelChangeColumn" Binding="{Binding Path=LOLO_LevelChange}" Header="LOLO Level Change" Width="SizeToHeader" />
+                    <DataGridTextColumn x:Name="lOLO_DelayColumn" Binding="{Binding Path=LOLO_Delay}" Header="LOLO Delay" Width="SizeToHeader" />
+                    <DataGridCheckBoxColumn x:Name="enabledColumn" Binding="{Binding Path=Enabled}" Header="Enabled" Width="SizeToHeader" />
+                    <DataGridTextColumn x:Name="locationColumn" Binding="{Binding Path=Location}" Header="Location" Width="SizeToHeader" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+    </Grid>
+</Window>
