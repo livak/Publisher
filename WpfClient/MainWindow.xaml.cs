@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 
-
 namespace WpfClient
 {
     public partial class MainWindow
@@ -11,8 +10,6 @@ namespace WpfClient
         {
             InitializeComponent();
             DataContext = _pwmViewModel;
-
-
         }
 
         private void btnGetLastDay_Click(object sender, RoutedEventArgs e)
@@ -22,7 +19,6 @@ namespace WpfClient
             {
                 _pwmViewModel.GetAverageLastDay(variable.Name);
             }
-
         }
     }
 }
