@@ -131,14 +131,14 @@ namespace WebService
             }
         }
 
-        public void AcknowledgeAlarm(int AlarmID)
+        public void AcknowledgeAlarm(int alarmId)
         {
             using (var context = new PowerMonitoringModelContainer())
             {
                 try
                 {
                     var alarm = (from activeAlarms in context.AlarmTerminalSet
-                                 where activeAlarms.Id == AlarmID
+                                 where activeAlarms.Id == alarmId
                                  select activeAlarms).First();
 
                     alarm.Acknowledged = !alarm.Acknowledged;

@@ -4,7 +4,7 @@
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import schemaLocation="http://localhost:60881/Service.svc?xsd=xsd0" namespace="http://tempuri.org/" />
       <xsd:import schemaLocation="http://localhost:60881/Service.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://localhost:60881/Service.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/WebService" />
+      <xsd:import schemaLocation="http://localhost:60881/Service.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/WebService.Entities" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IService_UpdateVariableSingle_InputMessage">
@@ -13,17 +13,29 @@
   <wsdl:message name="IService_UpdateVariableSingle_OutputMessage">
     <wsdl:part name="parameters" element="tns:UpdateVariableSingleResponse" />
   </wsdl:message>
+  <wsdl:message name="IService_AcknowledgeAlarm_InputMessage">
+    <wsdl:part name="parameters" element="tns:AcknowledgeAlarm" />
+  </wsdl:message>
+  <wsdl:message name="IService_AcknowledgeAlarm_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AcknowledgeAlarmResponse" />
+  </wsdl:message>
   <wsdl:message name="IService_GetVariables_InputMessage">
     <wsdl:part name="parameters" element="tns:GetVariables" />
   </wsdl:message>
   <wsdl:message name="IService_GetVariables_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetVariablesResponse" />
   </wsdl:message>
-  <wsdl:message name="IService_GetVariable_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetVariable" />
+  <wsdl:message name="IService_GetTerminal_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetTerminal" />
   </wsdl:message>
-  <wsdl:message name="IService_GetVariable_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetVariableResponse" />
+  <wsdl:message name="IService_GetTerminal_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetTerminalResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService_GetHistogram_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetHistogram" />
+  </wsdl:message>
+  <wsdl:message name="IService_GetHistogram_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetHistogramResponse" />
   </wsdl:message>
   <wsdl:message name="IService_GetAverageLastDay_InputMessage">
     <wsdl:part name="parameters" element="tns:GetAverageLastDay" />
@@ -36,13 +48,21 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IService/UpdateVariableSingle" message="tns:IService_UpdateVariableSingle_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IService/UpdateVariableSingleResponse" message="tns:IService_UpdateVariableSingle_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="AcknowledgeAlarm">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService/AcknowledgeAlarm" message="tns:IService_AcknowledgeAlarm_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService/AcknowledgeAlarmResponse" message="tns:IService_AcknowledgeAlarm_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetVariables">
       <wsdl:input wsaw:Action="http://tempuri.org/IService/GetVariables" message="tns:IService_GetVariables_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IService/GetVariablesResponse" message="tns:IService_GetVariables_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetVariable">
-      <wsdl:input wsaw:Action="http://tempuri.org/IService/GetVariable" message="tns:IService_GetVariable_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IService/GetVariableResponse" message="tns:IService_GetVariable_OutputMessage" />
+    <wsdl:operation name="GetTerminal">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService/GetTerminal" message="tns:IService_GetTerminal_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService/GetTerminalResponse" message="tns:IService_GetTerminal_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetHistogram">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService/GetHistogram" message="tns:IService_GetHistogram_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService/GetHistogramResponse" message="tns:IService_GetHistogram_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetAverageLastDay">
       <wsdl:input wsaw:Action="http://tempuri.org/IService/GetAverageLastDay" message="tns:IService_GetAverageLastDay_InputMessage" />
@@ -60,6 +80,15 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="AcknowledgeAlarm">
+      <soap:operation soapAction="http://tempuri.org/IService/AcknowledgeAlarm" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetVariables">
       <soap:operation soapAction="http://tempuri.org/IService/GetVariables" style="document" />
       <wsdl:input>
@@ -69,8 +98,17 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetVariable">
-      <soap:operation soapAction="http://tempuri.org/IService/GetVariable" style="document" />
+    <wsdl:operation name="GetTerminal">
+      <soap:operation soapAction="http://tempuri.org/IService/GetTerminal" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetHistogram">
+      <soap:operation soapAction="http://tempuri.org/IService/GetHistogram" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

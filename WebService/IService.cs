@@ -12,7 +12,7 @@ namespace WebService
         void UpdateVariableSingle(string name, Single currentValue, DateTime timeStamp);
 
         [OperationContract]
-        void AcknowledgeAlarm(int AlarmID);
+        void AcknowledgeAlarm(int alarmId);
 
         [OperationContract]
         List<VariableDto> GetVariables();
@@ -24,6 +24,6 @@ namespace WebService
         List<HistogramDto> GetHistogram();
 
         [OperationContract]
-        Single GetAverageLastDay(string Name);
+        Single GetAverageLastDay(string name);
     }
 }

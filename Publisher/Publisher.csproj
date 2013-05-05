@@ -117,6 +117,12 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="Service References\ServiceReference\Publisher.ServiceReference.HistogramDto.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\ServiceReference\Publisher.ServiceReference.TerminalDto.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\ServiceReference\Publisher.ServiceReference.VariableDto.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>

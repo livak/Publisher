@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://localhost:60881/Service.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/WebService" />
+  <xs:import schemaLocation="http://localhost:60881/Service.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/WebService.Entities" />
   <xs:element name="UpdateVariableSingle">
     <xs:complexType>
       <xs:sequence>
@@ -15,6 +15,18 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
+  <xs:element name="AcknowledgeAlarm">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="alarmId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AcknowledgeAlarmResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
   <xs:element name="GetVariables">
     <xs:complexType>
       <xs:sequence />
@@ -23,28 +35,38 @@
   <xs:element name="GetVariablesResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/WebService" minOccurs="0" name="GetVariablesResult" nillable="true" type="q1:ArrayOfVariableDto" />
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/WebService.Entities" minOccurs="0" name="GetVariablesResult" nillable="true" type="q1:ArrayOfVariableDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetVariable">
+  <xs:element name="GetTerminal">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetTerminalResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/WebService.Entities" minOccurs="0" name="GetTerminalResult" nillable="true" type="q2:ArrayOfTerminalDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetVariableResponse">
+  <xs:element name="GetHistogram">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetHistogramResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/WebService" minOccurs="0" name="GetVariableResult" nillable="true" type="q2:VariableDto" />
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/WebService.Entities" minOccurs="0" name="GetHistogramResult" nillable="true" type="q3:ArrayOfHistogramDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetAverageLastDay">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

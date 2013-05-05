@@ -17,7 +17,7 @@ namespace PanoramaApp1.ServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="VariableDto", Namespace="http://schemas.datacontract.org/2004/07/WebService")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="VariableDto", Namespace="http://schemas.datacontract.org/2004/07/WebService.Entities")]
     public partial class VariableDto : object, System.ComponentModel.INotifyPropertyChanged {
         
         private string CurrentValueField;
@@ -62,7 +62,7 @@ namespace PanoramaApp1.ServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="TerminalDto", Namespace="http://schemas.datacontract.org/2004/07/WebService")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="TerminalDto", Namespace="http://schemas.datacontract.org/2004/07/WebService.Entities")]
     public partial class TerminalDto : object, System.ComponentModel.INotifyPropertyChanged {
         
         private bool AcknowledgedField;
@@ -182,7 +182,7 @@ namespace PanoramaApp1.ServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="HistogramDto", Namespace="http://schemas.datacontract.org/2004/07/WebService")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="HistogramDto", Namespace="http://schemas.datacontract.org/2004/07/WebService.Entities")]
     public partial class HistogramDto : object, System.ComponentModel.INotifyPropertyChanged {
         
         private float SingleValueField;
@@ -235,7 +235,7 @@ namespace PanoramaApp1.ServiceReference {
         void EndUpdateVariableSingle(System.IAsyncResult result);
         
         [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IService/AcknowledgeAlarm", ReplyAction="http://tempuri.org/IService/AcknowledgeAlarmResponse")]
-        System.IAsyncResult BeginAcknowledgeAlarm(int AlarmID, System.AsyncCallback callback, object asyncState);
+        System.IAsyncResult BeginAcknowledgeAlarm(int alarmId, System.AsyncCallback callback, object asyncState);
         
         void EndAcknowledgeAlarm(System.IAsyncResult result);
         
@@ -255,7 +255,7 @@ namespace PanoramaApp1.ServiceReference {
         System.Collections.ObjectModel.ObservableCollection<PanoramaApp1.ServiceReference.HistogramDto> EndGetHistogram(System.IAsyncResult result);
         
         [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IService/GetAverageLastDay", ReplyAction="http://tempuri.org/IService/GetAverageLastDayResponse")]
-        System.IAsyncResult BeginGetAverageLastDay(string Name, System.AsyncCallback callback, object asyncState);
+        System.IAsyncResult BeginGetAverageLastDay(string name, System.AsyncCallback callback, object asyncState);
         
         float EndGetAverageLastDay(System.IAsyncResult result);
     }
@@ -499,8 +499,8 @@ namespace PanoramaApp1.ServiceReference {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult PanoramaApp1.ServiceReference.IService.BeginAcknowledgeAlarm(int AlarmID, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginAcknowledgeAlarm(AlarmID, callback, asyncState);
+        System.IAsyncResult PanoramaApp1.ServiceReference.IService.BeginAcknowledgeAlarm(int alarmId, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginAcknowledgeAlarm(alarmId, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -509,8 +509,8 @@ namespace PanoramaApp1.ServiceReference {
         }
         
         private System.IAsyncResult OnBeginAcknowledgeAlarm(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            int AlarmID = ((int)(inValues[0]));
-            return ((PanoramaApp1.ServiceReference.IService)(this)).BeginAcknowledgeAlarm(AlarmID, callback, asyncState);
+            int alarmId = ((int)(inValues[0]));
+            return ((PanoramaApp1.ServiceReference.IService)(this)).BeginAcknowledgeAlarm(alarmId, callback, asyncState);
         }
         
         private object[] OnEndAcknowledgeAlarm(System.IAsyncResult result) {
@@ -525,11 +525,11 @@ namespace PanoramaApp1.ServiceReference {
             }
         }
         
-        public void AcknowledgeAlarmAsync(int AlarmID) {
-            this.AcknowledgeAlarmAsync(AlarmID, null);
+        public void AcknowledgeAlarmAsync(int alarmId) {
+            this.AcknowledgeAlarmAsync(alarmId, null);
         }
         
-        public void AcknowledgeAlarmAsync(int AlarmID, object userState) {
+        public void AcknowledgeAlarmAsync(int alarmId, object userState) {
             if ((this.onBeginAcknowledgeAlarmDelegate == null)) {
                 this.onBeginAcknowledgeAlarmDelegate = new BeginOperationDelegate(this.OnBeginAcknowledgeAlarm);
             }
@@ -540,7 +540,7 @@ namespace PanoramaApp1.ServiceReference {
                 this.onAcknowledgeAlarmCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnAcknowledgeAlarmCompleted);
             }
             base.InvokeAsync(this.onBeginAcknowledgeAlarmDelegate, new object[] {
-                        AlarmID}, this.onEndAcknowledgeAlarmDelegate, this.onAcknowledgeAlarmCompletedDelegate, userState);
+                        alarmId}, this.onEndAcknowledgeAlarmDelegate, this.onAcknowledgeAlarmCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -676,8 +676,8 @@ namespace PanoramaApp1.ServiceReference {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult PanoramaApp1.ServiceReference.IService.BeginGetAverageLastDay(string Name, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginGetAverageLastDay(Name, callback, asyncState);
+        System.IAsyncResult PanoramaApp1.ServiceReference.IService.BeginGetAverageLastDay(string name, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginGetAverageLastDay(name, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -686,8 +686,8 @@ namespace PanoramaApp1.ServiceReference {
         }
         
         private System.IAsyncResult OnBeginGetAverageLastDay(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            string Name = ((string)(inValues[0]));
-            return ((PanoramaApp1.ServiceReference.IService)(this)).BeginGetAverageLastDay(Name, callback, asyncState);
+            string name = ((string)(inValues[0]));
+            return ((PanoramaApp1.ServiceReference.IService)(this)).BeginGetAverageLastDay(name, callback, asyncState);
         }
         
         private object[] OnEndGetAverageLastDay(System.IAsyncResult result) {
@@ -703,11 +703,11 @@ namespace PanoramaApp1.ServiceReference {
             }
         }
         
-        public void GetAverageLastDayAsync(string Name) {
-            this.GetAverageLastDayAsync(Name, null);
+        public void GetAverageLastDayAsync(string name) {
+            this.GetAverageLastDayAsync(name, null);
         }
         
-        public void GetAverageLastDayAsync(string Name, object userState) {
+        public void GetAverageLastDayAsync(string name, object userState) {
             if ((this.onBeginGetAverageLastDayDelegate == null)) {
                 this.onBeginGetAverageLastDayDelegate = new BeginOperationDelegate(this.OnBeginGetAverageLastDay);
             }
@@ -718,7 +718,7 @@ namespace PanoramaApp1.ServiceReference {
                 this.onGetAverageLastDayCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetAverageLastDayCompleted);
             }
             base.InvokeAsync(this.onBeginGetAverageLastDayDelegate, new object[] {
-                        Name}, this.onEndGetAverageLastDayDelegate, this.onGetAverageLastDayCompletedDelegate, userState);
+                        name}, this.onEndGetAverageLastDayDelegate, this.onGetAverageLastDayCompletedDelegate, userState);
         }
         
         private System.IAsyncResult OnBeginOpen(object[] inValues, System.AsyncCallback callback, object asyncState) {
@@ -811,9 +811,9 @@ namespace PanoramaApp1.ServiceReference {
                 base.EndInvoke("UpdateVariableSingle", _args, result);
             }
             
-            public System.IAsyncResult BeginAcknowledgeAlarm(int AlarmID, System.AsyncCallback callback, object asyncState) {
+            public System.IAsyncResult BeginAcknowledgeAlarm(int alarmId, System.AsyncCallback callback, object asyncState) {
                 object[] _args = new object[1];
-                _args[0] = AlarmID;
+                _args[0] = alarmId;
                 System.IAsyncResult _result = base.BeginInvoke("AcknowledgeAlarm", _args, callback, asyncState);
                 return _result;
             }
@@ -859,9 +859,9 @@ namespace PanoramaApp1.ServiceReference {
                 return _result;
             }
             
-            public System.IAsyncResult BeginGetAverageLastDay(string Name, System.AsyncCallback callback, object asyncState) {
+            public System.IAsyncResult BeginGetAverageLastDay(string name, System.AsyncCallback callback, object asyncState) {
                 object[] _args = new object[1];
-                _args[0] = Name;
+                _args[0] = name;
                 System.IAsyncResult _result = base.BeginInvoke("GetAverageLastDay", _args, callback, asyncState);
                 return _result;
             }
