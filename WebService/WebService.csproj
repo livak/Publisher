@@ -66,6 +66,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\HistogramDto.cs" />
+    <Compile Include="Entities\TerminalDto.cs" />
+    <Compile Include="Entities\VariableDto.cs" />
+    <Compile Include="IService.cs" />
     <Compile Include="PowerMonitoringModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -75,6 +79,7 @@
     <Compile Include="Service.svc.cs">
       <DependentUpon>Service.svc</DependentUpon>
     </Compile>
+    <Compile Include="ServiceVariable.cs" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="PowerMonitoringModel.edmx">

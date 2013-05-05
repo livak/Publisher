@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.ServiceModel;
-using System.Text;
-
+using WebService.Entities;
 
 namespace WebService
 {
@@ -568,109 +566,5 @@ namespace WebService
 
         // int j = 1;
         #endregion
-
-
-
-
-    }
-
-    [ServiceContract]
-    public interface IService
-    {
-        //[OperationContract]
-        //void UpdateVariable(string name,string currentValue);
-
-        //[OperationContract]
-        //VariableDto GetVariable(string Name);
-
-        [OperationContract]
-        void UpdateVariableSingle(string name, Single currentValue, DateTime timeStamp);
-
-        [OperationContract]
-        void AcknowledgeAlarm(int AlarmID);
-
-        [OperationContract]
-        List<VariableDto> GetVariables();
-
-        [OperationContract]
-        List<TerminalDto> GetTerminal();
-
-        [OperationContract]
-        List<HistogramDto> GetHistogram();
-
-        [OperationContract]
-        Single GetAverageLastDay(string Name);
-    }
-
-    [DataContract]
-    public class VariableDto
-    {
-        [DataMember]
-        public string VariableName { get; set; }
-
-        [DataMember]
-        public string CurrentValue { get; set; }
-    }
-
-    [DataContract]
-    public class TerminalDto
-    {
-        [DataMember]
-        public int AlarmId { get; set; }
-
-        [DataMember]
-        public string VariableName { get; set; }
-
-        [DataMember]
-        public string AlarmLevelName { get; set; }
-
-        [DataMember]
-        public DateTime SetTime { get; set; }
-
-        [DataMember]
-        public double MaxValue { get; set; }
-
-        [DataMember]
-        public bool Active { get; set; }
-
-        [DataMember]
-        public bool Acknowledged { get; set; }
-    }
-
-    [DataContract]
-    public class HistogramDto
-    {
-        [DataMember]
-        public Single SingleValue { get; set; }
-
-        [DataMember]
-        public DateTime TimeStamp { get; set; }
-    }
-
-    public class ServiceVariable
-    {
-
-        public VariableDto VariableDto { get; set; }
-
-        public TerminalDto TerminalDto { get; set; }
-
-        public TerminalDto TerminalDtoWhenTimeIsUp { get; set; }
-       
-        public System.Timers.Timer time = new System.Timers.Timer();
-
-
-        public ServiceVariable(VariableDto variableDto)
-        {
-            VariableDto = variableDto;
-
-        }
-
-        //AlarmConfig alarmConfig;
-        //AlarmTerminal alarmTerminal;
-        //AlarmLog alarmLogIfTimeIsUp;
-        //AlarmLog alarmLog;
-        //AlarmLog allarmLogIfTimeIsUp;
-
-
     }
 }
