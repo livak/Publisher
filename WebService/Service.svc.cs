@@ -99,7 +99,7 @@ namespace WebService
                 if (alarmConfiguration == null) return;
 
                 //High
-                if (AlarmTools.UpdateAndAlarmReturnIsActive(currentValue, alarmConfiguration, "HI", alarmConfiguration.HI_LevelChange, alarmConfiguration.HI_Enable, AlarmTools.UsporediHi, context) == false)
+                if (AlarmTools.UpdateAlarmAndReturnIsActive(currentValue, alarmConfiguration, "HI", alarmConfiguration.HI_LevelChange, alarmConfiguration.HI_Enable, AlarmTools.UsporediHi, context) == false)
                 {
                     AlarmTools.RemoveLowerAlarmIfHigherLevelExist(context, alarmConfiguration,"HI","HIHI");
                 }
@@ -108,13 +108,13 @@ namespace WebService
                     AlarmTools.UpdateAcknowladgeFromHigherLevelIfExist(alarmConfiguration,"HI","HIHI");
                 }
 
-                if (AlarmTools.UpdateAndAlarmReturnIsActive(currentValue, alarmConfiguration, "HIHI", alarmConfiguration.HIHI_LevelChange, alarmConfiguration.HIHI_Enable, AlarmTools.UsporediHi, context))
+                if (AlarmTools.UpdateAlarmAndReturnIsActive(currentValue, alarmConfiguration, "HIHI", alarmConfiguration.HIHI_LevelChange, alarmConfiguration.HIHI_Enable, AlarmTools.UsporediHi, context))
                 {
                     AlarmTools.RemoveAlarmIfExist(context, alarmConfiguration, "HI");
                 }
 
                 //Low
-                if (AlarmTools.UpdateAndAlarmReturnIsActive(currentValue, alarmConfiguration, "LO", alarmConfiguration.LO_LevelChange, alarmConfiguration.LO_Enable, AlarmTools.UsporediLo, context) == false)
+                if (AlarmTools.UpdateAlarmAndReturnIsActive(currentValue, alarmConfiguration, "LO", alarmConfiguration.LO_LevelChange, alarmConfiguration.LO_Enable, AlarmTools.UsporediLo, context) == false)
                 {
                     AlarmTools.RemoveLowerAlarmIfHigherLevelExist(context, alarmConfiguration, "LO", "LOLO");
                 }
@@ -122,7 +122,7 @@ namespace WebService
                 {
                     AlarmTools.UpdateAcknowladgeFromHigherLevelIfExist(alarmConfiguration, "LO", "LOLO");
                 }
-                if (AlarmTools.UpdateAndAlarmReturnIsActive(currentValue, alarmConfiguration, "LOLO", alarmConfiguration.LOLO_LevelChange, alarmConfiguration.LOLO_Enabled, AlarmTools.UsporediLo, context))
+                if (AlarmTools.UpdateAlarmAndReturnIsActive(currentValue, alarmConfiguration, "LOLO", alarmConfiguration.LOLO_LevelChange, alarmConfiguration.LOLO_Enabled, AlarmTools.UsporediLo, context))
                 {
                     AlarmTools.RemoveAlarmIfExist(context, alarmConfiguration, "LO");
                 }                     

@@ -28,41 +28,39 @@ namespace WebService.Business
             UpdateHistogramFromLog(sadBezMiliSec.AddMinutes(-1), sadBezMiliSec);
         }
 
-        public static void UpdateAcknowladgeFromHigherLevelIfExist(AlarmConfig alarmConfiguration, string lowerAlarmLevelName, string higherAlarmLevelName)
+        public static bool UpdateAcknowladgeFromHigherLevelIfExist(AlarmConfig alarmConfiguration, string lowerAlarmLevelName, string higherAlarmLevelName)
         {
             try
             {
-                alarmConfiguration.AlarmTerminalSet.First(s => s.AlarmLevelName == lowerAlarmLevelName).Acknowledged =
-                    alarmConfiguration.AlarmTerminalSet.First(s => s.AlarmLevelName == higherAlarmLevelName).Acknowledged;
+                alarmConfiguration.AlarmTerminalSet.First(s => s.AlarmLevelName == lowerAlarmLevelName).Acknowledged = alarmConfiguration.AlarmTerminalSet.First(s => s.AlarmLevelName == higherAlarmLevelName).Acknowledged;
+                return true;
             }
             catch (Exception)
             {
-
+                return false;
             }
         }
 
-        public static void RemoveLowerAlarmIfHigherLevelExist(PowerMonitoringModelContainer context, AlarmConfig alarmConfiguration, string lowerAlarmLevelName, string higherAlarmLevelName)
+        public static bool RemoveLowerAlarmIfHigherLevelExist(PowerMonitoringModelContainer context, AlarmConfig alarmConfiguration, string lowerAlarmLevelName, string higherAlarmLevelName)
         {
-            if (AlarmExist(alarmConfiguration, higherAlarmLevelName))
-            {
-                RemoveAlarmIfExist(context, alarmConfiguration, lowerAlarmLevelName);
-            }
+            return AlarmExist(alarmConfiguration, higherAlarmLevelName) && RemoveAlarmIfExist(context, alarmConfiguration, lowerAlarmLevelName);
         }
 
-        public static void RemoveAlarmIfExist(PowerMonitoringModelContainer context, AlarmConfig alarmConfiguration, string alarmLevelName)
+        public static bool RemoveAlarmIfExist(PowerMonitoringModelContainer context, AlarmConfig alarmConfiguration, string alarmLevelName)
         {
             try
             {
                 var alarm = alarmConfiguration.AlarmTerminalSet.First(s => s.AlarmLevelName == alarmLevelName);
                 context.DeleteObject(alarm);
+                return true;
             }
             catch (Exception)
             {
-
+                return false;
             }
         }
 
-        public static bool UpdateAndAlarmReturnIsActive(float currentValue, AlarmConfig alarmConfiguration, string alarmLevelName, double alarmConfigurationLevelChange, bool alarmConfigurationEnable, Usporedi delegateUsporedi, PowerMonitoringModelContainer context)
+        public static bool UpdateAlarmAndReturnIsActive(float currentValue, AlarmConfig alarmConfiguration, string alarmLevelName, double alarmConfigurationLevelChange, bool alarmConfigurationEnable, Usporedi delegateUsporedi, PowerMonitoringModelContainer context)
         {
             AlarmTerminal alarmTerminal;
             try
