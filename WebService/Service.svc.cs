@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using WebService.Entities;
+using System.Timers;
 
 namespace WebService
 {
@@ -11,54 +12,34 @@ namespace WebService
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)] 
     public class Service :IService
     {
-        readonly string singleTypeString = (typeof(Single)).ToString();
-        readonly string doubleTypeString = (typeof(Double)).ToString();
-        
+        readonly string _singleTypeString = (typeof(Single)).ToString();
+        readonly string _doubleTypeString = (typeof(Double)).ToString();
         public List<ServiceVariable> ServiceVariables = new List<ServiceVariable>();
+        Timer _time;
+        int _longTimer;
 
-        System.Timers.Timer time;
-
-        int longTimer = 0;
-
-        void time_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        void time_Elapsed(object sender, ElapsedEventArgs e)
         {
-            longTimer++;
+            _longTimer++;
 
-            if (longTimer>=60)
+            if (_longTimer>=60)
             {
-                longTimer = 0;
+                _longTimer = 0;
                 time_Elapsed_Minute(sender, e);       
             }
-
         }
 
-        class ValueTime
+        static void time_Elapsed_Minute(object sender, ElapsedEventArgs e)
         {
-            public Single  Value { get; set; }
-            public DateTime Time { get; set; }
+                DateTime sad = DateTime.UtcNow;
+                DateTime sadBezMiliSec = (sad.AddSeconds(-sad.Second)).AddMilliseconds(-sad.Millisecond);
+                UpdateHistogramFromLog(sadBezMiliSec.AddMinutes(-1), sadBezMiliSec);
         }
 
-        void time_Elapsed_Minute(object sender, System.Timers.ElapsedEventArgs e)
-        {
-            using (var context = new PowerMonitoringModelContainer())
-            {
-                DateTime Sad = DateTime.UtcNow;
-                DateTime SadBezMiliSec = (Sad.AddSeconds(-Sad.Second)).AddMilliseconds(-Sad.Millisecond);
-
-                UpdateHistogramFromLog(SadBezMiliSec.AddMinutes(-1), SadBezMiliSec);
-            }
-
-
-
-        }
-
-        void UpdateHistogramFromLog(DateTime dateTimeBegin,DateTime datetimeEnd)
+        static void UpdateHistogramFromLog(DateTime dateTimeBegin,DateTime datetimeEnd)
         {
             using (var context = new PowerMonitoringModelContainer())
             {
-                DateTime Sad = DateTime.UtcNow;
-                DateTime SadBezMiliSec = (Sad.AddSeconds(-Sad.Second)).AddMilliseconds(-Sad.Millisecond);
-
                 foreach (var variable in context.VariableSet)
                 {
                     var date = (from log in variable.SingleLogSet
@@ -75,11 +56,10 @@ namespace WebService
                                            group min by min.TimeStamp.Minute);
                             foreach (var m in minutes)
                             {
-                                Single average = m.Average(s => s.SingleValue);
                                 var mPoredanPoVremenu = m.OrderBy(s => s.TimeStamp.Second);
                                 Single a = 0;
-                                Single Energy = 0;
-                                DateTime timeA = new DateTime();
+                                Single energy = 0;
+                                var timeA = new DateTime();
 
                                 bool prva = true;
                                 foreach (var log in mPoredanPoVremenu)
@@ -91,38 +71,33 @@ namespace WebService
                                         timeA = log.TimeStamp;
                                         if (mPoredanPoVremenu.Count() == 1)
                                         {
-                                            Energy = log.SingleValue;
+                                            energy = log.SingleValue;
                                         }
-
                                     }
                                     else
                                     {
                                         Single trapez = ((a + log.SingleValue) / 2) * (Single)(log.TimeStamp - timeA).TotalSeconds;
-
                                         a = log.SingleValue;
                                         timeA = log.TimeStamp;
-
-                                        Energy = Energy + trapez;
+                                        energy = energy + trapez;
                                     }
-
                                 }
 
                                 Single snaga;
                                 if (mPoredanPoVremenu.Count() == 1)
                                 {
-                                    snaga = Energy;
+                                    snaga = energy;
                                 }
-
                                 else
                                 {
-                                    snaga = Energy / (Single)(mPoredanPoVremenu.Last().TimeStamp - mPoredanPoVremenu.First().TimeStamp).TotalSeconds;
+                                    snaga = energy / (Single)(mPoredanPoVremenu.Last().TimeStamp - mPoredanPoVremenu.First().TimeStamp).TotalSeconds;
                                 }
 
                                 DateTime d = m.First().TimeStamp;
-                                DateTime TimeStamp = new DateTime(d.Year, d.Month, d.Day, d.Hour, d.Minute, 0);
-                                SingleHistogram histogram = SingleHistogram.CreateSingleHistogram(-1, snaga, TimeStamp, -1);
+                                var timeStamp = new DateTime(d.Year, d.Month, d.Day, d.Hour, d.Minute, 0);
+                                var histogram = SingleHistogram.CreateSingleHistogram(-1, snaga, timeStamp, -1);
 
-                                if (!variable.SingleHistogram.Any(s => s.TimeStamp == TimeStamp))
+                                if (variable.SingleHistogram.All(s => s.TimeStamp != timeStamp))
                                 {
                                     variable.SingleHistogram.Add(histogram);
                                 }
@@ -132,27 +107,23 @@ namespace WebService
                 }
                 context.SaveChanges();
             }
-
         }
 
         #region UpdateVariableSingle
         public void UpdateVariableSingle(string name, float currentValue, DateTime timeStamp)
         {
-
-            if (time == null)
+            if (_time == null)
             {
-                longTimer = DateTime.UtcNow.Second;
-                time = new System.Timers.Timer(1000);
-                time.Elapsed += new System.Timers.ElapsedEventHandler(time_Elapsed);
-                time.AutoReset = true;
-                time.Start();
+                _longTimer = DateTime.UtcNow.Second;
+                _time = new Timer(1000);
+                _time.Elapsed += time_Elapsed;
+                _time.AutoReset = true;
+                _time.Start();
             }
 
             #region Upisuje se u service
 
-            ServiceVariable serviceVariable = null;
-
-
+            ServiceVariable serviceVariable;
 
             //ako postoji variabla pod imenom na servisu updejtaj vrijednost ako ne postoji kreiraj
             try
@@ -164,102 +135,94 @@ namespace WebService
             }
             catch (Exception)
             {
-                VariableDto variableDto = new VariableDto
-                {
-                    CurrentValue = currentValue.ToString(),
-                    VariableName = name,
-                };
+                var variableDto = new VariableDto
+                    {
+                        CurrentValue = currentValue.ToString(),
+                        VariableName = name,
+                    };
                 serviceVariable = new ServiceVariable(variableDto);
                 ServiceVariables.Add(serviceVariable);
             }
-            #endregion
 
+            #endregion
 
             using (var context = new PowerMonitoringModelContainer())
             {
                 //ako ne postoji entity na sevicu pogledaj dali variajbla postoji u bazi ako ne postoji kreiraj
                 // provaj je naći u bazi pod imenom ako ne postoji kreiraj
-                Variable VariableEnty = null;
+                Variable variableEnty;
                 try
                 {
-                    VariableEnty = (from v in context.VariableSet
+                    variableEnty = (from v in context.VariableSet
                                     where v.Name == name
                                     select v).First();
                 }
                 catch (Exception)
                 {
-                    VariableEnty = Variable.CreateVariable(-1, name, singleTypeString, true);
-                    context.AddToVariableSet(VariableEnty);
+                    variableEnty = Variable.CreateVariable(-1, name, _singleTypeString, true);
+                    context.AddToVariableSet(variableEnty);
                     context.SaveChanges();
                 }
 
-                if (VariableEnty != null)
+                if (variableEnty == null) return;
+                
+                //logiranje
+                if (variableEnty.DataLoggingEnabled)
                 {
-                    //logiranje
-                    if (VariableEnty.DataLoggingEnabled)
+                    if (variableEnty.Type == _singleTypeString)
                     {
-                        if (VariableEnty.Type == singleTypeString)
-                        {
-                            VariableEnty.SingleLogSet.Add(SingleLog.CreateSingleLog(-1, currentValue, timeStamp, -1));
-                        }
-                        if (VariableEnty.Type == doubleTypeString)
-                        {
-                            VariableEnty.DoubleLogSet.Add(DoubleLog.CreateDoubleLog(-1, currentValue, timeStamp, -1));
-                        }
+                        variableEnty.SingleLogSet.Add(SingleLog.CreateSingleLog(-1, currentValue, timeStamp, -1));
                     }
-                    context.SaveChanges();
-
-
-                    AlarmConfig alarmConfiguration = VariableEnty.AlarmConfigSet;
-                    if (alarmConfiguration != null)
+                    if (variableEnty.Type == _doubleTypeString)
                     {
-
-                        //High
-                        if (UpdateAndAlarmReturnIsActive(currentValue, alarmConfiguration, "HI", alarmConfiguration.HI_LevelChange, alarmConfiguration.HI_Enable, UsporediHI, context) == false)
-                        {
-                            RemoveLowerAlarmIfHigherLevelExist(context, alarmConfiguration,"HI","HIHI");
-                        }
-                        else
-                        {
-                            UpdateAcknowladgeFromHigherLevelIfExist(alarmConfiguration,"HI","HIHI");
-                        }
-
-                        if (UpdateAndAlarmReturnIsActive(currentValue, alarmConfiguration, "HIHI", alarmConfiguration.HIHI_LevelChange, alarmConfiguration.HIHI_Enable, UsporediHI, context))
-                        {
-                            RemoveAlarmIfExist(context, alarmConfiguration, "HI");
-                        }
-
-
-                        //Low
-                        if (UpdateAndAlarmReturnIsActive(currentValue, alarmConfiguration, "LO", alarmConfiguration.LO_LevelChange, alarmConfiguration.LO_Enable, UsporediLO, context) == false)
-                        {
-                            RemoveLowerAlarmIfHigherLevelExist(context, alarmConfiguration, "LO", "LOLO");
-                        }
-                        else
-                        {
-                            UpdateAcknowladgeFromHigherLevelIfExist(alarmConfiguration, "LO", "LOLO");
-                        }
-                        if ( UpdateAndAlarmReturnIsActive(currentValue, alarmConfiguration, "LOLO", alarmConfiguration.LOLO_LevelChange, alarmConfiguration.LOLO_Enabled, UsporediLO, context))
-                        {
-                            RemoveAlarmIfExist(context, alarmConfiguration, "LO");
-                        }                     
-
-                       context.SaveChanges();
-
+                        variableEnty.DoubleLogSet.Add(DoubleLog.CreateDoubleLog(-1, currentValue, timeStamp, -1));
                     }
+                }
+                context.SaveChanges();
 
+                AlarmConfig alarmConfiguration = variableEnty.AlarmConfigSet;
+                if (alarmConfiguration == null) return;
+
+                //High
+                if (UpdateAndAlarmReturnIsActive(currentValue, alarmConfiguration, "HI", alarmConfiguration.HI_LevelChange, alarmConfiguration.HI_Enable, UsporediHi, context) == false)
+                {
+                    RemoveLowerAlarmIfHigherLevelExist(context, alarmConfiguration,"HI","HIHI");
+                }
+                else
+                {
+                    UpdateAcknowladgeFromHigherLevelIfExist(alarmConfiguration,"HI","HIHI");
                 }
 
-            }
+                if (UpdateAndAlarmReturnIsActive(currentValue, alarmConfiguration, "HIHI", alarmConfiguration.HIHI_LevelChange, alarmConfiguration.HIHI_Enable, UsporediHi, context))
+                {
+                    RemoveAlarmIfExist(context, alarmConfiguration, "HI");
+                }
 
+
+                //Low
+                if (UpdateAndAlarmReturnIsActive(currentValue, alarmConfiguration, "LO", alarmConfiguration.LO_LevelChange, alarmConfiguration.LO_Enable, UsporediLo, context) == false)
+                {
+                    RemoveLowerAlarmIfHigherLevelExist(context, alarmConfiguration, "LO", "LOLO");
+                }
+                else
+                {
+                    UpdateAcknowladgeFromHigherLevelIfExist(alarmConfiguration, "LO", "LOLO");
+                }
+                if ( UpdateAndAlarmReturnIsActive(currentValue, alarmConfiguration, "LOLO", alarmConfiguration.LOLO_LevelChange, alarmConfiguration.LOLO_Enabled, UsporediLo, context))
+                {
+                    RemoveAlarmIfExist(context, alarmConfiguration, "LO");
+                }                     
+
+                context.SaveChanges();
+            }
         }
 
         private static void UpdateAcknowladgeFromHigherLevelIfExist(AlarmConfig alarmConfiguration, string lowerAlarmLevelName, string higherAlarmLevelName)
         {
             try
             {
-                alarmConfiguration.AlarmTerminalSet.Where(s => s.AlarmLevelName == lowerAlarmLevelName).First().Acknowledged =
-                    alarmConfiguration.AlarmTerminalSet.Where(s => s.AlarmLevelName == higherAlarmLevelName).First().Acknowledged;
+                alarmConfiguration.AlarmTerminalSet.First(s => s.AlarmLevelName == lowerAlarmLevelName).Acknowledged =
+                    alarmConfiguration.AlarmTerminalSet.First(s => s.AlarmLevelName == higherAlarmLevelName).Acknowledged;
             }
             catch (Exception)
             {
@@ -279,7 +242,7 @@ namespace WebService
         {
             try
             {
-                var alarm = alarmConfiguration.AlarmTerminalSet.Where(s => s.AlarmLevelName == alarmLevelName).First();
+                var alarm = alarmConfiguration.AlarmTerminalSet.First(s => s.AlarmLevelName == alarmLevelName);
                 context.DeleteObject(alarm);
             }
             catch (Exception)
@@ -292,15 +255,8 @@ namespace WebService
         {
             try
             {
-                var alarm = alarmConfiguration.AlarmTerminalSet.Where(s => s.AlarmLevelName == alarmLevelName).First();
-                if (alarm == null)
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
+                var alarm = alarmConfiguration.AlarmTerminalSet.First(s => s.AlarmLevelName == alarmLevelName);
+                return alarm != null;
             }
             catch (Exception)
             {
@@ -308,12 +264,12 @@ namespace WebService
             }
         }
 
-        private static bool UpdateAndAlarmReturnIsActive(float currentValue, AlarmConfig alarmConfiguration, string AlarmLevelName, double alarmConfiguration_LevelChange, bool alarmConfigurationEnable, Usporedi delegateUsporedi, PowerMonitoringModelContainer context)
+        private static bool UpdateAndAlarmReturnIsActive(float currentValue, AlarmConfig alarmConfiguration, string alarmLevelName, double alarmConfigurationLevelChange, bool alarmConfigurationEnable, Usporedi delegateUsporedi, PowerMonitoringModelContainer context)
         {
-            AlarmTerminal alarmTerminal = null;
+            AlarmTerminal alarmTerminal;
             try
             {
-                alarmTerminal = alarmConfiguration.AlarmTerminalSet.Where(s => s.AlarmLevelName == AlarmLevelName).First();
+                alarmTerminal = alarmConfiguration.AlarmTerminalSet.First(s => s.AlarmLevelName == alarmLevelName);
 
             }
             catch (Exception)
@@ -321,27 +277,27 @@ namespace WebService
                 alarmTerminal = null;
             }
 
-            if (delegateUsporedi(currentValue, alarmConfiguration_LevelChange) && alarmConfigurationEnable)
+            if (delegateUsporedi(currentValue, alarmConfigurationLevelChange) && alarmConfigurationEnable)
             {
                 if (alarmTerminal == null)
                 {
                     bool Acnowladged = false;
-                    if (AlarmLevelName == "HI")
+                    if (alarmLevelName == "HI")
                     {
                         try
                         {
-                            Acnowladged = alarmConfiguration.AlarmTerminalSet.Where(s => s.AlarmLevelName == "HIHI").First().Acknowledged;
+                            Acnowladged = alarmConfiguration.AlarmTerminalSet.First(s => s.AlarmLevelName == "HIHI").Acknowledged;
                         }
                         catch (Exception)
                         {
                             Acnowladged = false;
                         }
                     }
-                    if (AlarmLevelName == "LO")
+                    if (alarmLevelName == "LO")
                     {
                         try
                         {
-                            Acnowladged = alarmConfiguration.AlarmTerminalSet.Where(s => s.AlarmLevelName == "LOLO").First().Acknowledged;
+                            Acnowladged = alarmConfiguration.AlarmTerminalSet.First(s => s.AlarmLevelName == "LOLO").Acknowledged;
                         }
                         catch (Exception)
                         {
@@ -349,7 +305,7 @@ namespace WebService
                         }
                     }
 
-                    alarmTerminal = AlarmTerminal.CreateAlarmTerminal(-1, true, false, AlarmLevelName, currentValue, DateTime.Now, DateTime.Now, alarmConfiguration_LevelChange, 1,-1);
+                    alarmTerminal = AlarmTerminal.CreateAlarmTerminal(-1, true, false, alarmLevelName, currentValue, DateTime.Now, DateTime.Now, alarmConfigurationLevelChange, 1,-1);
                     alarmConfiguration.AlarmTerminalSet.Add(alarmTerminal);
                 }
                 else
@@ -369,81 +325,54 @@ namespace WebService
                 {
                     alarmTerminal.Active = false;
                     if (alarmTerminal.Acknowledged)
+                    {
                         context.AlarmTerminalSet.DeleteObject(alarmTerminal);
+                    }
                 }
             }
             
-
-            if (alarmTerminal!=null)
-            {
-                return alarmTerminal.Active;
-            }
-            else
-            {
-                return false;
-            }
-
+            return alarmTerminal!=null && alarmTerminal.Active;
         }
 
         #region DelegatZaUsporedbu
         delegate bool Usporedi(double current, double max);
-        private bool UsporediHI(double current, double max)
+        private static bool UsporediHi(double current, double max)
         {
-            if (current >= max)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return current >= max;
         }
-        private bool UsporediLO(double current, double max)
+
+        private static bool UsporediLo(double current, double max)
         {
-            if (current <= max)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return current <= max;
         }
-        
+
         #endregion        
 
         #endregion
 
         public void AcknowledgeAlarm(int AlarmID)
         {
-            using (var Context = new PowerMonitoringModelContainer())
+            using (var context = new PowerMonitoringModelContainer())
             {
                 try
                 {
-                    var alarm = (from activeAlarms in Context.AlarmTerminalSet
+                    var alarm = (from activeAlarms in context.AlarmTerminalSet
                                  where activeAlarms.Id == AlarmID
                                  select activeAlarms).First();
 
-                    if (alarm.Acknowledged)
-                    {
-                        alarm.Acknowledged = false;
-                    }
-                    else
-                    {
-                        alarm.Acknowledged = true;
-                    }
+                    alarm.Acknowledged = !alarm.Acknowledged;
 
                     //Potrebno kada je publisher ugasen pa se variajbla ne updeta
                     if (alarm.Active == false && alarm.Acknowledged)
                     {
-                        Context.DeleteObject(alarm);
+                        context.DeleteObject(alarm);
                     }
                 }
                 catch (Exception)
                 {
                     // implement
                 }
-                Context.SaveChanges();
+                context.SaveChanges();
             }
         }
 
@@ -458,18 +387,17 @@ namespace WebService
             using (var context = new PowerMonitoringModelContainer())
             {
                 List<TerminalDto> lista =
-                 (from t in context.AlarmTerminalSet
-                  select new TerminalDto
-                                  {
-                                      AlarmId = t.Id,
-                                      Acknowledged = t.Acknowledged,
-                                      Active = t.Active,
-                                      AlarmLevelName = t.AlarmLevelName,
-                                      MaxValue = t.MaxValue,
-                                      SetTime = t.SetTime,
-                                      VariableName = t.AlarmConfigSet.VariableSet.Name,
-                                  }).ToList();
-
+                    (from t in context.AlarmTerminalSet
+                     select new TerminalDto
+                         {
+                             AlarmId = t.Id,
+                             Acknowledged = t.Acknowledged,
+                             Active = t.Active,
+                             AlarmLevelName = t.AlarmLevelName,
+                             MaxValue = t.MaxValue,
+                             SetTime = t.SetTime,
+                             VariableName = t.AlarmConfigSet.VariableSet.Name,
+                         }).ToList();
                 return lista;
             }
         }
@@ -478,7 +406,7 @@ namespace WebService
         {
             using (var context = new PowerMonitoringModelContainer())
             {
-                DateTime nowUct=DateTime.UtcNow.AddMinutes(-24);
+                var nowUct = DateTime.UtcNow.AddMinutes(-24);
 
                 var variabla = (from v in context.VariableSet
                                 where v.Name == "Ptot"
@@ -486,29 +414,26 @@ namespace WebService
                 return (from histogram in variabla.SingleHistogram
                         where histogram.TimeStamp > nowUct
                         select new HistogramDto
-                        {
-                            SingleValue = histogram.SingleValue,
-                            TimeStamp = histogram.TimeStamp,
-                        }).ToList();
+                            {
+                                SingleValue = histogram.SingleValue,
+                                TimeStamp = histogram.TimeStamp,
+                            }).ToList();
             }
         }
-
 
         public float GetAverageLastDay(string name)
         {
             using (var context = new PowerMonitoringModelContainer())
             {
-
-                DateTime lastDay = DateTime.UtcNow.AddDays(-1);
+                var lastDay = DateTime.UtcNow.AddDays(-1);
 
                 try
                 {
                     return (from v in context.VariableSet
-                            where v.Name == name && v.Type == singleTypeString
+                            where v.Name == name && v.Type == _singleTypeString
                             from log in v.SingleLogSet
                             where log.TimeStamp > lastDay
                             select log.SingleValue).Average();
-
                 }
                 catch (Exception)
                 {
@@ -561,9 +486,6 @@ namespace WebService
 
         //    UpdateServiceListVariableDto(name, currentValue);
         //}
-
-
-
         // int j = 1;
         #endregion
     }
