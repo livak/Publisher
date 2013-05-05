@@ -8,12 +8,6 @@ namespace WebService
     [ServiceContract]
     public interface IService
     {
-        //[OperationContract]
-        //void UpdateVariable(string name,string currentValue);
-
-        //[OperationContract]
-        //VariableDto GetVariable(string Name);
-
         [OperationContract]
         void UpdateVariableSingle(string name, Single currentValue, DateTime timeStamp);
 

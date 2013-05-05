@@ -281,30 +281,6 @@ namespace WebService
             {
                 if (alarmTerminal == null)
                 {
-                    bool Acnowladged = false;
-                    if (alarmLevelName == "HI")
-                    {
-                        try
-                        {
-                            Acnowladged = alarmConfiguration.AlarmTerminalSet.First(s => s.AlarmLevelName == "HIHI").Acknowledged;
-                        }
-                        catch (Exception)
-                        {
-                            Acnowladged = false;
-                        }
-                    }
-                    if (alarmLevelName == "LO")
-                    {
-                        try
-                        {
-                            Acnowladged = alarmConfiguration.AlarmTerminalSet.First(s => s.AlarmLevelName == "LOLO").Acknowledged;
-                        }
-                        catch (Exception)
-                        {
-                            Acnowladged = false;
-                        }
-                    }
-
                     alarmTerminal = AlarmTerminal.CreateAlarmTerminal(-1, true, false, alarmLevelName, currentValue, DateTime.Now, DateTime.Now, alarmConfigurationLevelChange, 1,-1);
                     alarmConfiguration.AlarmTerminalSet.Add(alarmTerminal);
                 }
@@ -316,7 +292,6 @@ namespace WebService
                         alarmTerminal.MaxValue = currentValue;
                         alarmTerminal.MaxValueTime = DateTime.Now;
                     }
-
                 }
             }
             else
@@ -441,52 +416,5 @@ namespace WebService
                 }
             }
         }
-
-
-        #region Junk
-        //private  void UpdateServiceListVariableDto(string name, string currentValue)
-        //{
-        //    bool variableExist = false;
-        //    foreach (var variable in ServiceVariables.Where(s => s.VariableDto.VariableName == name))
-        //    {
-        //        variable.VariableDto.CurrentValue = currentValue;
-        //        variableExist = true;
-        //    }
-
-        //    if (variableExist == false)
-        //    {
-        //        ServiceVariables.Add(
-        //            new ServiceVariable(new VariableDto()
-        //                                {
-        //                                    CurrentValue = currentValue,
-        //                                    VariableName = name,
-        //                                }
-        //        ));
-        //    }
-        //}
-
-        //public void UpdateVariable(string name, string currentValue)
-        //{
-
-        //    using (var context= new PowerMonitoringModelContainer())
-        //    {
-        //        //ako nema dodaj
-        //        if (context.VariableSet.Count(s => s.Name == name) == 0)
-        //        {
-        //            context.AddToVariableSet(Variable.CreateVariable(-1, name, singleTypeString));
-        //            context.SaveChanges();
-        //        }
-
-        //        (from a in context.VariableSet
-        //         where a.Name == name && a.Type == singleTypeString
-        //         select a.SingleLog
-        //         ).First().Add(SingleLog.CreateSingleLog(-1, Single.Parse(currentValue), DateTime.UtcNow, -1));
-        //        context.SaveChanges();
-        //    }
-
-        //    UpdateServiceListVariableDto(name, currentValue);
-        //}
-        // int j = 1;
-        #endregion
     }
 }
