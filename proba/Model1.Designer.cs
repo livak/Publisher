@@ -8,12 +8,13 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.ComponentModel;
+using System.Data.EntityClient;
 using System.Data.Objects;
 using System.Data.Objects.DataClasses;
-using System.Data.EntityClient;
-using System.ComponentModel;
-using System.Xml.Serialization;
+using System.Linq;
 using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 [assembly: EdmSchemaAttribute()]
 #region EDM Relationship Metadata
@@ -188,6 +189,7 @@ namespace proba
         private ObjectSet<VariableSet> _VariableSet;
 
         #endregion
+
         #region AddTo Methods
     
         /// <summary>
@@ -247,11 +249,11 @@ namespace proba
         }
 
         #endregion
+
     }
-    
 
     #endregion
-    
+
     #region Entities
     
     /// <summary>
@@ -312,6 +314,7 @@ namespace proba
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -774,6 +777,7 @@ namespace proba
         partial void OnLocationChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -860,6 +864,7 @@ namespace proba
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -894,6 +899,7 @@ namespace proba
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -1044,6 +1050,7 @@ namespace proba
         partial void OnCurrentValueChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -1086,6 +1093,7 @@ namespace proba
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -1128,6 +1136,7 @@ namespace proba
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -1398,6 +1407,7 @@ namespace proba
         partial void OnAlarmConfig_IdChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -1440,6 +1450,7 @@ namespace proba
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -1470,6 +1481,7 @@ namespace proba
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -1572,6 +1584,7 @@ namespace proba
         partial void OnVariableIdChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -1614,6 +1627,7 @@ namespace proba
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -1644,6 +1658,7 @@ namespace proba
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -1746,6 +1761,7 @@ namespace proba
         partial void OnVariableIdChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -1788,6 +1804,7 @@ namespace proba
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -1818,6 +1835,7 @@ namespace proba
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -1920,6 +1938,7 @@ namespace proba
         partial void OnVariableIdChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -1962,6 +1981,7 @@ namespace proba
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -1992,6 +2012,7 @@ namespace proba
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -2094,6 +2115,7 @@ namespace proba
         partial void OnDataLoggingEnabledChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -2202,8 +2224,10 @@ namespace proba
         }
 
         #endregion
+
     }
 
     #endregion
+
     
 }
