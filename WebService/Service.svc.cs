@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.ServiceModel;
 using WebService.Business;
@@ -19,14 +20,14 @@ namespace WebService
         Timer _time;
         int _longTimer;
 
-        void time_Elapsed(object sender, ElapsedEventArgs e)
+        void TimeElapsed(object sender, ElapsedEventArgs e)
         {
             _longTimer++;
 
             if (_longTimer>=60)
             {
                 _longTimer = 0;
-               AlarmTools.time_Elapsed_Minute(sender, e);       
+               AlarmTools.TimeElapsedMinute(sender, e);       
             }
         }
 
@@ -36,7 +37,7 @@ namespace WebService
             {
                 _longTimer = DateTime.UtcNow.Second;
                 _time = new Timer(1000);
-                _time.Elapsed += time_Elapsed;
+                _time.Elapsed += TimeElapsed;
                 _time.AutoReset = true;
                 _time.Start();
             }
@@ -48,13 +49,13 @@ namespace WebService
                 serviceVariable = (from v in ServiceVariables
                                    where v.VariableDto.VariableName == name
                                    select v).First();
-                serviceVariable.VariableDto.CurrentValue = currentValue.ToString();
+                serviceVariable.VariableDto.CurrentValue = currentValue.ToString(CultureInfo.InvariantCulture);
             }
             catch (Exception)
             {
                 var variableDto = new VariableDto
                     {
-                        CurrentValue = currentValue.ToString(),
+                        CurrentValue = currentValue.ToString(CultureInfo.InvariantCulture),
                         VariableName = name,
                     };
                 serviceVariable = new ServiceVariable(variableDto);
@@ -149,7 +150,7 @@ namespace WebService
                         context.DeleteObject(alarm);
                     }
                 }
-                catch (Exception)
+                catch (Exception x)
                 {
                     // implement
                 }

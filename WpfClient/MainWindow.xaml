@@ -59,7 +59,7 @@
                 <StackPanel DockPanel.Dock="Top">
                     <Label>Location:</Label>
                     <Label Content="{Binding Path=BrowserItem.Path}"></Label>
-                    <Button Name="btnGetLastDay" Click="btnGetLastDay_Click"  >getLastDay
+                    <Button Name="btnGetLastDay" Click="BtnGetLastDayClick"  >getLastDay
                     </Button>
                     <Label Content="{Binding ElementName=main, Path=DataContext.Average}"></Label>
                     <Label>Quality:</Label>

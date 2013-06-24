@@ -92,7 +92,6 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.config" />
-    <None Include="ClassDiagram1.cd" />
     <None Include="PowerLogDBDataSet.xsc">
       <DependentUpon>PowerLogDBDataSet.xsd</DependentUpon>
     </None>

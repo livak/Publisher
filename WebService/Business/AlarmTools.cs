@@ -21,7 +21,7 @@ namespace WebService.Business
         }
 
         //public methods
-        public static void time_Elapsed_Minute(object sender, ElapsedEventArgs e)
+        public static void TimeElapsedMinute(object sender, ElapsedEventArgs e)
         {
             DateTime sad = DateTime.UtcNow;
             DateTime sadBezMiliSec = (sad.AddSeconds(-sad.Second)).AddMilliseconds(-sad.Millisecond);
