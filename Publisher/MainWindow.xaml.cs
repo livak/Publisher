@@ -1,69 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
-
 using NationalInstruments.NetworkVariable;
 
 using System.Collections.ObjectModel;
 
 namespace Publisher
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
-        readonly string processLocationRemote = @"\\161.53.66.11\S1 Modbus Library";
-        readonly string processLocationLocal = @"\\Jure-PC\jure";
-
-        ObservableCollection<MySingleSubscriber> subscribers = new ObservableCollection<MySingleSubscriber>();
-        NationalInstruments.NetworkVariable.Browser browser;
-
-
-        ServiceReference.ServiceClient _svc = new ServiceReference.ServiceClient();
+        private const string ProcessLocationRemote = @"\\161.53.66.11\S1 Modbus Library";
+        private const string ProcessLocationLocal = @"\\Jure-PC\jure";
+        readonly ServiceReference.ServiceClient _svc = new ServiceReference.ServiceClient();
+        readonly ObservableCollection<MySingleSubscriber> _subscribers = new ObservableCollection<MySingleSubscriber>();
+        readonly Browser _browser;
 
         public MainWindow()
         {
             InitializeComponent();
-            cbxProcesToAdd.Items.Add(processLocationLocal);
-            cbxProcesToAdd.Items.Add(processLocationRemote);
+            cbxProcesToAdd.Items.Add(ProcessLocationLocal);
+            cbxProcesToAdd.Items.Add(ProcessLocationRemote);
 
+            _browser = new Browser();
+            _browser.GetSubitemsCompleted += BrowserGetSubitemsCompleted;
 
-            browser = new Browser();
-            browser.GetSubitemsCompleted += new EventHandler<GetSubitemsCompletedEventArgs>(browser_GetSubitemsCompleted);
-
-            LoadBrowserToGetSubItemsAsync(processLocationRemote);
-            LoadBrowserToGetSubItemsAsync(processLocationLocal);
-            this.DataContext = subscribers;
-
-
+            LoadBrowserToGetSubItemsAsync(ProcessLocationRemote);
+            LoadBrowserToGetSubItemsAsync(ProcessLocationLocal);
+            DataContext = _subscribers;
         }
 
         private void LoadBrowserToGetSubItemsAsync(string processLocation)
         {
-            BrowserItem process = null;
             try
             {
-                if (browser.TryGetItem(processLocation, out process))
+                BrowserItem process;
+                if (_browser.TryGetItem(processLocation, out process))
                 {
-                    browser.GetSubitemsAsync(process, browser);
+                    _browser.GetSubitemsAsync(process, _browser);
                 }
                 else
                 {
                     MessageBox.Show("Failed to get process from location \n\r:" + processLocation);
                 }
-
             }
             catch (Exception ex)
             {
@@ -71,7 +50,7 @@ namespace Publisher
             }
         }
 
-        void browser_GetSubitemsCompleted(object sender, GetSubitemsCompletedEventArgs e)
+        void BrowserGetSubitemsCompleted(object sender, GetSubitemsCompletedEventArgs e)
         {
             if (e.Error==null && e.Items!=null)
             {
@@ -83,42 +62,39 @@ namespace Publisher
             }
         }
 
-        private void SubscribeVariables(BrowserItem[] variables)
+        private void SubscribeVariables(IEnumerable<BrowserItem> variables)
         {
-            foreach (BrowserItem bi in variables)
+            foreach (BrowserItem browserItem in variables)
             {
-                if (bi.ItemType == BrowserItemType.Item && bi.GetVariableType() == typeof(Single))
+                if (browserItem.ItemType == BrowserItemType.Item && browserItem.GetVariableType() == typeof(Single))
                 {
-                    MySingleSubscriber subscriberSingle = new MySingleSubscriber(bi);
-                    subscriberSingle.ConnectCompleted += new EventHandler<ConnectCompletedEventArgs>(subscriberSingle_ConnectCompleted);
+                    var subscriberSingle = new MySingleSubscriber(browserItem);
+                    subscriberSingle.ConnectCompleted += SubscriberSingleConnectCompleted;
                     subscriberSingle.ConnectAsync();
                 }
             }
         }
 
-
-        void subscriberSingle_ConnectCompleted(object sender, ConnectCompletedEventArgs e)
+        void SubscriberSingleConnectCompleted(object sender, ConnectCompletedEventArgs e)
         {
-            MySingleSubscriber subscriber = sender as MySingleSubscriber;
-            if (e.Error==null && subscriber!=null)
+            var subscriber = sender as MySingleSubscriber;
+            if (e.Error == null && subscriber != null)
             {
-                subscriber.DataUpdated += new EventHandler<DataUpdatedEventArgs<float>>(subscriberSingle_DataUpdated);
-                subscribers.Add(subscriber);
+                subscriber.DataUpdated += SubscriberSingleDataUpdated;
+                _subscribers.Add(subscriber);
             }
             else
             {
-                MessageBox.Show("Variable: " + subscriber.BrowserItem.Name + " failed to subscribe");
+                if (subscriber != null)
+                    MessageBox.Show("Variable: " + subscriber.BrowserItem.Name + " failed to subscribe");
             }
         }
-        void subscriberSingle_DataUpdated(object sender, DataUpdatedEventArgs<float> e)
+        void SubscriberSingleDataUpdated(object sender, DataUpdatedEventArgs<float> e)
         {
-            
-           // _svc.UpdateVariableAsync(((MySingleSubscriber)sender).BrowserItem.Name, e.Data.GetValue().ToString());
-
             _svc.UpdateVariableSingleAsync(((MySingleSubscriber)sender).BrowserItem.Name, e.Data.GetValue(), e.Data.TimeStamp);      
         }
 
-        private void btnAddProcess_Click(object sender, RoutedEventArgs e)
+        private void BtnAddProcessClick(object sender, RoutedEventArgs e)
         {
             if (cbxProcesToAdd.SelectedItem!=null)
             {
@@ -130,10 +106,9 @@ namespace Publisher
             }
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void WindowClosing(object sender, CancelEventArgs e)
         {
-            //potrebno je desposat browser zbog toga što se javlja error pri zatvaranju programa
-            browser.Dispose();
+            _browser.Dispose();
         }
     }
 }

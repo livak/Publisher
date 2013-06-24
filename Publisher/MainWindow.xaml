@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
-        Title="PowerMonitorig Publisher" Height="350" Width="525" Closing="Window_Closing">
+        Title="PowerMonitorig Publisher" Height="350" Width="525" Closing="WindowClosing">
     <Window.Resources>
         <CollectionViewSource x:Key="myView" Source="{Binding}" >
             <CollectionViewSource.SortDescriptions>
@@ -17,7 +17,7 @@
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
                 <ComboBox Name="cbxProcesToAdd" Width="150" IsEditable="True" Text="Select process to add" >
                 </ComboBox>
-                <Button Name="btnAddProcess" Click="btnAddProcess_Click">Add process</Button>
+                <Button Name="btnAddProcess" Click="BtnAddProcessClick">Add process</Button>
             </StackPanel>
             <StackPanel DockPanel.Dock="Top" Width="300" Orientation="Horizontal" HorizontalAlignment="Left">
                 <Label> Name</Label>
