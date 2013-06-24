@@ -242,17 +242,17 @@ namespace PanoramaApp1.ServiceReference {
         [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IService/GetVariables", ReplyAction="http://tempuri.org/IService/GetVariablesResponse")]
         System.IAsyncResult BeginGetVariables(System.AsyncCallback callback, object asyncState);
         
-        System.Collections.ObjectModel.ObservableCollection<PanoramaApp1.ServiceReference.VariableDto> EndGetVariables(System.IAsyncResult result);
+        PanoramaApp1.ServiceReference.VariableDto[] EndGetVariables(System.IAsyncResult result);
         
         [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IService/GetTerminal", ReplyAction="http://tempuri.org/IService/GetTerminalResponse")]
         System.IAsyncResult BeginGetTerminal(System.AsyncCallback callback, object asyncState);
         
-        System.Collections.ObjectModel.ObservableCollection<PanoramaApp1.ServiceReference.TerminalDto> EndGetTerminal(System.IAsyncResult result);
+        PanoramaApp1.ServiceReference.TerminalDto[] EndGetTerminal(System.IAsyncResult result);
         
         [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IService/GetHistogram", ReplyAction="http://tempuri.org/IService/GetHistogramResponse")]
         System.IAsyncResult BeginGetHistogram(System.AsyncCallback callback, object asyncState);
         
-        System.Collections.ObjectModel.ObservableCollection<PanoramaApp1.ServiceReference.HistogramDto> EndGetHistogram(System.IAsyncResult result);
+        PanoramaApp1.ServiceReference.HistogramDto[] EndGetHistogram(System.IAsyncResult result);
         
         [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IService/GetAverageLastDay", ReplyAction="http://tempuri.org/IService/GetAverageLastDayResponse")]
         System.IAsyncResult BeginGetAverageLastDay(string name, System.AsyncCallback callback, object asyncState);
@@ -275,10 +275,10 @@ namespace PanoramaApp1.ServiceReference {
             this.results = results;
         }
         
-        public System.Collections.ObjectModel.ObservableCollection<PanoramaApp1.ServiceReference.VariableDto> Result {
+        public PanoramaApp1.ServiceReference.VariableDto[] Result {
             get {
                 base.RaiseExceptionIfNecessary();
-                return ((System.Collections.ObjectModel.ObservableCollection<PanoramaApp1.ServiceReference.VariableDto>)(this.results[0]));
+                return ((PanoramaApp1.ServiceReference.VariableDto[])(this.results[0]));
             }
         }
     }
@@ -294,10 +294,10 @@ namespace PanoramaApp1.ServiceReference {
             this.results = results;
         }
         
-        public System.Collections.ObjectModel.ObservableCollection<PanoramaApp1.ServiceReference.TerminalDto> Result {
+        public PanoramaApp1.ServiceReference.TerminalDto[] Result {
             get {
                 base.RaiseExceptionIfNecessary();
-                return ((System.Collections.ObjectModel.ObservableCollection<PanoramaApp1.ServiceReference.TerminalDto>)(this.results[0]));
+                return ((PanoramaApp1.ServiceReference.TerminalDto[])(this.results[0]));
             }
         }
     }
@@ -313,10 +313,10 @@ namespace PanoramaApp1.ServiceReference {
             this.results = results;
         }
         
-        public System.Collections.ObjectModel.ObservableCollection<PanoramaApp1.ServiceReference.HistogramDto> Result {
+        public PanoramaApp1.ServiceReference.HistogramDto[] Result {
             get {
                 base.RaiseExceptionIfNecessary();
-                return ((System.Collections.ObjectModel.ObservableCollection<PanoramaApp1.ServiceReference.HistogramDto>)(this.results[0]));
+                return ((PanoramaApp1.ServiceReference.HistogramDto[])(this.results[0]));
             }
         }
     }
@@ -549,7 +549,7 @@ namespace PanoramaApp1.ServiceReference {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Collections.ObjectModel.ObservableCollection<PanoramaApp1.ServiceReference.VariableDto> PanoramaApp1.ServiceReference.IService.EndGetVariables(System.IAsyncResult result) {
+        PanoramaApp1.ServiceReference.VariableDto[] PanoramaApp1.ServiceReference.IService.EndGetVariables(System.IAsyncResult result) {
             return base.Channel.EndGetVariables(result);
         }
         
@@ -558,7 +558,7 @@ namespace PanoramaApp1.ServiceReference {
         }
         
         private object[] OnEndGetVariables(System.IAsyncResult result) {
-            System.Collections.ObjectModel.ObservableCollection<PanoramaApp1.ServiceReference.VariableDto> retVal = ((PanoramaApp1.ServiceReference.IService)(this)).EndGetVariables(result);
+            PanoramaApp1.ServiceReference.VariableDto[] retVal = ((PanoramaApp1.ServiceReference.IService)(this)).EndGetVariables(result);
             return new object[] {
                     retVal};
         }
@@ -593,7 +593,7 @@ namespace PanoramaApp1.ServiceReference {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Collections.ObjectModel.ObservableCollection<PanoramaApp1.ServiceReference.TerminalDto> PanoramaApp1.ServiceReference.IService.EndGetTerminal(System.IAsyncResult result) {
+        PanoramaApp1.ServiceReference.TerminalDto[] PanoramaApp1.ServiceReference.IService.EndGetTerminal(System.IAsyncResult result) {
             return base.Channel.EndGetTerminal(result);
         }
         
@@ -602,7 +602,7 @@ namespace PanoramaApp1.ServiceReference {
         }
         
         private object[] OnEndGetTerminal(System.IAsyncResult result) {
-            System.Collections.ObjectModel.ObservableCollection<PanoramaApp1.ServiceReference.TerminalDto> retVal = ((PanoramaApp1.ServiceReference.IService)(this)).EndGetTerminal(result);
+            PanoramaApp1.ServiceReference.TerminalDto[] retVal = ((PanoramaApp1.ServiceReference.IService)(this)).EndGetTerminal(result);
             return new object[] {
                     retVal};
         }
@@ -637,7 +637,7 @@ namespace PanoramaApp1.ServiceReference {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Collections.ObjectModel.ObservableCollection<PanoramaApp1.ServiceReference.HistogramDto> PanoramaApp1.ServiceReference.IService.EndGetHistogram(System.IAsyncResult result) {
+        PanoramaApp1.ServiceReference.HistogramDto[] PanoramaApp1.ServiceReference.IService.EndGetHistogram(System.IAsyncResult result) {
             return base.Channel.EndGetHistogram(result);
         }
         
@@ -646,7 +646,7 @@ namespace PanoramaApp1.ServiceReference {
         }
         
         private object[] OnEndGetHistogram(System.IAsyncResult result) {
-            System.Collections.ObjectModel.ObservableCollection<PanoramaApp1.ServiceReference.HistogramDto> retVal = ((PanoramaApp1.ServiceReference.IService)(this)).EndGetHistogram(result);
+            PanoramaApp1.ServiceReference.HistogramDto[] retVal = ((PanoramaApp1.ServiceReference.IService)(this)).EndGetHistogram(result);
             return new object[] {
                     retVal};
         }
@@ -829,9 +829,9 @@ namespace PanoramaApp1.ServiceReference {
                 return _result;
             }
             
-            public System.Collections.ObjectModel.ObservableCollection<PanoramaApp1.ServiceReference.VariableDto> EndGetVariables(System.IAsyncResult result) {
+            public PanoramaApp1.ServiceReference.VariableDto[] EndGetVariables(System.IAsyncResult result) {
                 object[] _args = new object[0];
-                System.Collections.ObjectModel.ObservableCollection<PanoramaApp1.ServiceReference.VariableDto> _result = ((System.Collections.ObjectModel.ObservableCollection<PanoramaApp1.ServiceReference.VariableDto>)(base.EndInvoke("GetVariables", _args, result)));
+                PanoramaApp1.ServiceReference.VariableDto[] _result = ((PanoramaApp1.ServiceReference.VariableDto[])(base.EndInvoke("GetVariables", _args, result)));
                 return _result;
             }
             
@@ -841,9 +841,9 @@ namespace PanoramaApp1.ServiceReference {
                 return _result;
             }
             
-            public System.Collections.ObjectModel.ObservableCollection<PanoramaApp1.ServiceReference.TerminalDto> EndGetTerminal(System.IAsyncResult result) {
+            public PanoramaApp1.ServiceReference.TerminalDto[] EndGetTerminal(System.IAsyncResult result) {
                 object[] _args = new object[0];
-                System.Collections.ObjectModel.ObservableCollection<PanoramaApp1.ServiceReference.TerminalDto> _result = ((System.Collections.ObjectModel.ObservableCollection<PanoramaApp1.ServiceReference.TerminalDto>)(base.EndInvoke("GetTerminal", _args, result)));
+                PanoramaApp1.ServiceReference.TerminalDto[] _result = ((PanoramaApp1.ServiceReference.TerminalDto[])(base.EndInvoke("GetTerminal", _args, result)));
                 return _result;
             }
             
@@ -853,9 +853,9 @@ namespace PanoramaApp1.ServiceReference {
                 return _result;
             }
             
-            public System.Collections.ObjectModel.ObservableCollection<PanoramaApp1.ServiceReference.HistogramDto> EndGetHistogram(System.IAsyncResult result) {
+            public PanoramaApp1.ServiceReference.HistogramDto[] EndGetHistogram(System.IAsyncResult result) {
                 object[] _args = new object[0];
-                System.Collections.ObjectModel.ObservableCollection<PanoramaApp1.ServiceReference.HistogramDto> _result = ((System.Collections.ObjectModel.ObservableCollection<PanoramaApp1.ServiceReference.HistogramDto>)(base.EndInvoke("GetHistogram", _args, result)));
+                PanoramaApp1.ServiceReference.HistogramDto[] _result = ((PanoramaApp1.ServiceReference.HistogramDto[])(base.EndInvoke("GetHistogram", _args, result)));
                 return _result;
             }
             

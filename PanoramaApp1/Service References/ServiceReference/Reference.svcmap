@@ -8,9 +8,7 @@
     <GenerateInternalTypes>false</GenerateInternalTypes>
     <GenerateMessageContracts>false</GenerateMessageContracts>
     <NamespaceMappings />
-    <CollectionMappings>
-      <CollectionMapping TypeName="System.Collections.ObjectModel.ObservableCollection`1" Category="List" />
-    </CollectionMappings>
+    <CollectionMappings />
     <GenerateSerializableTypes>false</GenerateSerializableTypes>
     <Serializer>Auto</Serializer>
     <UseSerializerForFaults>true</UseSerializerForFaults>
@@ -20,14 +18,14 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://localhost:60881/Service.svc" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://192.168.43.159:60881/Service.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="Service.xsd" MetadataType="Schema" ID="14fe2b01-3c79-4747-8555-f8fe5c2aee4d" SourceId="1" SourceUrl="http://localhost:60881/Service.svc?xsd=xsd2" />
-    <MetadataFile FileName="Service1.xsd" MetadataType="Schema" ID="a48f8f22-1f0a-4523-b06d-7a0abe379133" SourceId="1" SourceUrl="http://localhost:60881/Service.svc?xsd=xsd0" />
-    <MetadataFile FileName="Service2.xsd" MetadataType="Schema" ID="cc5b34e3-a4fc-47cc-83c8-66e268e7afe5" SourceId="1" SourceUrl="http://localhost:60881/Service.svc?xsd=xsd1" />
-    <MetadataFile FileName="Service.wsdl" MetadataType="Wsdl" ID="d2357d97-d984-4527-b83a-c4addeebe271" SourceId="1" SourceUrl="http://localhost:60881/Service.svc?wsdl" />
-    <MetadataFile FileName="Service.disco" MetadataType="Disco" ID="6c726efe-f75e-4f5d-a60a-b405db568388" SourceId="1" SourceUrl="http://localhost:60881/Service.svc?disco" />
+    <MetadataFile FileName="Service3.xsd" MetadataType="Schema" ID="0c07afa1-22f3-4616-922d-92310db6e201" SourceId="1" SourceUrl="http://192.168.43.159:60881/Service.svc?xsd=xsd2" />
+    <MetadataFile FileName="Service1.disco" MetadataType="Disco" ID="c74eab72-477c-4792-86fd-ec321d65f370" SourceId="1" SourceUrl="http://192.168.43.159:60881/Service.svc?disco" />
+    <MetadataFile FileName="Service1.wsdl" MetadataType="Wsdl" ID="6837f6dc-3d8f-4e12-8512-87c9e5ff80bf" SourceId="1" SourceUrl="http://192.168.43.159:60881/Service.svc?wsdl" />
+    <MetadataFile FileName="Service31.xsd" MetadataType="Schema" ID="e2ecd6cd-84a4-4694-9761-84c7ff59ea5c" SourceId="1" SourceUrl="http://192.168.43.159:60881/Service.svc?xsd=xsd1" />
+    <MetadataFile FileName="Service32.xsd" MetadataType="Schema" ID="e1d0ca6f-e528-46e8-99db-bedf5415e2bb" SourceId="1" SourceUrl="http://192.168.43.159:60881/Service.svc?xsd=xsd0" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
