@@ -71,6 +71,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="..\Common\AlarmStatus.cs">
+      <Link>ViewModel\AlarmStatus.cs</Link>
+    </Compile>
     <Compile Include="..\Common\HistogramViewModel.cs">
       <Link>ViewModel\HistogramViewModel.cs</Link>
     </Compile>
@@ -83,11 +86,15 @@
     <Compile Include="..\Common\TerminalViewModel.cs">
       <Link>ViewModel\TerminalViewModel.cs</Link>
     </Compile>
+    <Compile Include="..\Common\VariableSingle.cs">
+      <Link>ViewModel\VariableSingle.cs</Link>
+    </Compile>
     <Compile Include="Service References\ServiceReference\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\AlarmColorConverter.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

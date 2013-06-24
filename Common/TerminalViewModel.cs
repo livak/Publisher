@@ -1,93 +1,83 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using System.ComponentModel;
-using System.Collections.ObjectModel;
 
 #if SILVERLIGHT && WINDOWS_PHONE
-using PanoramaApp1;
 using PanoramaApp1.ServiceReference;
 #endif
-
 
 #if  !SILVERLIGHT
 using WpfClient.ServiceReference;
 #endif
 
-
-
 namespace WpfClient
 {
     public class TerminalViewModel : INotifyPropertyChanged
     {
+        private readonly int _alarmId;
+        private readonly ServiceClient _svc;
 
-        #region INotifyProperties
-
-        private bool acknowledged;
+        private bool _acknowledged;
         public bool Acknowledged
         {
-            get { return acknowledged; }
+            get { return _acknowledged; }
             set
             {
-                acknowledged = value; this.NotifyPropertyChanged("Acknowledged"); SetAlarmStatusColor();
+                _acknowledged = value; OnPropertyChanged("Acknowledged"); SetAlarmStatusColor();
                 if (_svc != null)
                 {
-                    _svc.AcknowledgeAlarmAsync(alarmId);
+                    _svc.AcknowledgeAlarmAsync(_alarmId);
                 }
 
             }
         }
 
-        private bool active;
+        private bool _active;
         public bool Active
         {
-            get { return active; }
-            set { active = value; this.NotifyPropertyChanged("Active"); SetAlarmStatusColor(); }
+            get { return _active; }
+            set { _active = value; OnPropertyChanged("Active"); SetAlarmStatusColor(); }
         }
 
-        private string alarmLevelName;
+        private string _alarmLevelName;
         public string AlarmLevelName
         {
-            get { return alarmLevelName; }
-            set { alarmLevelName = value; this.NotifyPropertyChanged("AlarmLevelName"); }
+            get { return _alarmLevelName; }
+            set { _alarmLevelName = value; OnPropertyChanged("AlarmLevelName"); }
         }
 
-        private double maxValue;
+        private double _maxValue;
         public double MaxValue
         {
-            get { return maxValue; }
-            set { maxValue = value; this.NotifyPropertyChanged("MaxValue"); }
+            get { return _maxValue; }
+            set { _maxValue = value; OnPropertyChanged("MaxValue"); }
         }
 
-        private DateTime setTime;
+        private DateTime _setTime;
         public DateTime SetTime
         {
-            get { return setTime; }
-            set { setTime = value; this.NotifyPropertyChanged("SetTime"); }
+            get { return _setTime; }
+            set { _setTime = value; OnPropertyChanged("SetTime"); }
         }
 
-        private string variableName;
+        private string _variableName;
         public string VariableName
         {
-            get { return variableName; }
+            get { return _variableName; }
             private set
             {
-                if (value != variableName)
+                if (value != _variableName)
                 {
-                    variableName = value;
-                    this.NotifyPropertyChanged("VariableName");
+                    _variableName = value;
+                    OnPropertyChanged("VariableName");
                 }
             }
         }
 
-        private AlarmStatus alarStatusColor;
-
+        private AlarmStatus _alarStatusColor;
         public AlarmStatus AlarmStausColor
         {
-            get { return alarStatusColor; }
-            set { alarStatusColor = value; NotifyPropertyChanged("AlarmStausColor"); }
+            get { return _alarStatusColor; }
+            set { _alarStatusColor = value; OnPropertyChanged("AlarmStausColor"); }
         }
 
         private void SetAlarmStatusColor()
@@ -96,30 +86,16 @@ namespace WpfClient
             {
                 if (Active)
                 {
-                    AlarmStausColor = AlarmStatus.Blue_AcknowledgedActive;
+                    AlarmStausColor = AlarmStatus.BlueAcknowledgedActive;
                 }
             }
             else
             {
-                if (Active)
-                {
-                    AlarmStausColor = AlarmStatus.Red_UnAcknowledgedActive;
-                }
-                else
-                {
-                    AlarmStausColor = AlarmStatus.Green_UnAcknowledgedInActive;
-                }
+                AlarmStausColor = Active ? AlarmStatus.RedUnAcknowledgedActive : AlarmStatus.GreenUnAcknowledgedInActive;
             }
         }
 
-        private int alarmId;
-
-        #endregion
-
-        private ServiceClient _svc;
-
-        #region Constructors
-        public TerminalViewModel(TerminalDto terminalDto, ServiceClient _svc)
+        public TerminalViewModel(TerminalDto terminalDto, ServiceClient svc)
         {
             Acknowledged = terminalDto.Acknowledged;
             Active = terminalDto.Active;
@@ -127,46 +103,25 @@ namespace WpfClient
             MaxValue = terminalDto.MaxValue;
             SetTime = terminalDto.SetTime;
             VariableName = terminalDto.VariableName;
-            alarmId = terminalDto.AlarmId;
-            this._svc = _svc;
-
+            _alarmId = terminalDto.AlarmId;
+            _svc = svc;
         }
-
-        #endregion
-
-
 
         public void Update(TerminalDto terminalDto)
         {
             //Acknowledged = terminalDto.Acknowledged;
             Active = terminalDto.Active;
-           // AlarmLevelName = terminalDto.AlarmLevelName;
+            // AlarmLevelName = terminalDto.AlarmLevelName;
             MaxValue = terminalDto.MaxValue;
             SetTime = terminalDto.SetTime;
             //VariableName = terminalDto.VariableName;
         }
 
-
-        #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged(String propertyName)
+        protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
-            if (null != handler)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
-        #endregion
-
-
     }
-
-    public enum AlarmStatus
-    {
-        Red_UnAcknowledgedActive,
-        Green_UnAcknowledgedInActive,
-        Blue_AcknowledgedActive,
-    }
-
 }

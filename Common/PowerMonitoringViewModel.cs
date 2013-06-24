@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-
 using System.ComponentModel;
 using System.Collections.ObjectModel;
 
-using System.Windows.Input;
-
 #if  WINDOWS_PHONE
-using PanoramaApp1;
 using PanoramaApp1.ServiceReference;
 #endif
 
@@ -17,145 +12,131 @@ using PanoramaApp1.ServiceReference;
 using WpfClient.ServiceReference;
 #endif
 
-
-
-
 namespace WpfClient
 {
-    public class PowerMonitoringViewModel:INotifyPropertyChanged
+    public class PowerMonitoringViewModel : INotifyPropertyChanged
     {
         public ObservableCollection<NetVariableViewModel> Items { get; private set; }
-
         public ObservableCollection<TerminalViewModel> TerminalAlarms { get; private set; }
-
         public ObservableCollection<HistogramViewModel> Histogram { get; private set; }
 
-        ServiceClient _svc;
-        System.Windows.Threading.DispatcherTimer timer;
+        private readonly ServiceClient _svc;
+        private readonly System.Windows.Threading.DispatcherTimer _timer;
+        private DateTime _lastUpdate = DateTime.Now;
+        private int _minuteTimer;
 
-        DateTime LastUpdate = DateTime.Now;
-
-        #region INotifyProperties
-        private int refreshRate;
+        private int _refreshRate;
         public int RefreshRate
         {
-            get
-            { 
-                return refreshRate; 
-            }
-            set 
+            get { return _refreshRate; }
+            set
             {
-                if (value != refreshRate)
+                if (value != _refreshRate)
                 {
-                    refreshRate = value;
-                    NotifyPropertyChanged("RefreshRate");
+                    _refreshRate = value;
+                    OnPropertyChanged("RefreshRate");
                 }
             }
         }
 
-        private string errorText;
+        private string _errorText;
         public string ErrorText
         {
-            get { return errorText; }
-            set { errorText = value; NotifyPropertyChanged("ErrorText"); }
+            get { return _errorText; }
+            set
+            {
+                _errorText = value;
+                OnPropertyChanged("ErrorText");
+            }
         }
 
-        private double average;
+        private double _average;
         public double Average
         {
-            get { return average; }
-            set { average = value; NotifyPropertyChanged("Average"); }
+            get { return _average; }
+            set
+            {
+                _average = value;
+                OnPropertyChanged("Average");
+            }
         }
 
-        private double histogramInterval;
-
+        private double _histogramInterval;
         public double HistogramInterval
         {
-            get { return histogramInterval; }
-            set { histogramInterval = value; NotifyPropertyChanged("HistogramInterval"); }
+            get { return _histogramInterval; }
+            set
+            {
+                _histogramInterval = value;
+                OnPropertyChanged("HistogramInterval");
+            }
         }
-        
-        
-        
-        #endregion
 
-
-
-        #region Constructors
         public PowerMonitoringViewModel()
         {
-            this.Items = new ObservableCollection<NetVariableViewModel>();
-            this.TerminalAlarms = new ObservableCollection<TerminalViewModel>();
-            this.Histogram = new ObservableCollection<HistogramViewModel>();
+            Items = new ObservableCollection<NetVariableViewModel>();
+            TerminalAlarms = new ObservableCollection<TerminalViewModel>();
+            Histogram = new ObservableCollection<HistogramViewModel>();
             HistogramInterval = 1;
 
-            DateTime Sad = DateTime.UtcNow;
-            DateTime SadBezMiliSec = (Sad.AddSeconds(-Sad.Second)).AddMilliseconds(-Sad.Millisecond);
-
+            var sad = DateTime.UtcNow;
+            DateTime sadBezMiliSec = (sad.AddSeconds(-sad.Second)).AddMilliseconds(-sad.Millisecond);
 
             for (int i = 0; i < 24; i++)
             {
-                Histogram.Add(new HistogramViewModel { SingleValue = 0, TimeStamp = SadBezMiliSec.AddMinutes(-(24 - i)) });
+                Histogram.Add(new HistogramViewModel {SingleValue = 0, TimeStamp = sadBezMiliSec.AddMinutes(-(24 - i))});
             }
 
             _svc = new ServiceClient();
-            _svc.GetVariablesCompleted += new EventHandler<GetVariablesCompletedEventArgs>(_svc_GetVariablesCompleted);
-            _svc.GetTerminalCompleted += new EventHandler<GetTerminalCompletedEventArgs>(_svc_GetTerminalCompleted);
-            _svc.GetAverageLastDayCompleted += new EventHandler<GetAverageLastDayCompletedEventArgs>(_svc_GetAverageLastDayCompleted);
-            _svc.GetHistogramCompleted += new EventHandler<GetHistogramCompletedEventArgs>(_svc_GetHistogramCompleted);
-
+            _svc.GetVariablesCompleted += SvcGetVariablesCompleted;
+            _svc.GetTerminalCompleted += SvcGetTerminalCompleted;
+            _svc.GetAverageLastDayCompleted += SvcGetAverageLastDayCompleted;
+            _svc.GetHistogramCompleted += SvcGetHistogramCompleted;
             //Maknit !!!!
             _svc.GetHistogramAsync();
 
-            timer = new System.Windows.Threading.DispatcherTimer();
-            timer.Interval = new TimeSpan(0, 0, 1);
-            timer.Start();
-            timer.Tick += new EventHandler(timer_Tick);
-
+            _timer = new System.Windows.Threading.DispatcherTimer {Interval = new TimeSpan(0, 0, 1)};
+            _timer.Start();
+            _timer.Tick += TimerTick;
         }
 
-
-        #endregion
-
-        int minuteTimer=0;
-        void timer_Tick(object sender, EventArgs e)
+        private void TimerTick(object sender, EventArgs e)
         {
-            RefreshRate = (int)(DateTime.Now - LastUpdate).TotalMilliseconds;
+            RefreshRate = (int) (DateTime.Now - _lastUpdate).TotalMilliseconds;
 
             _svc.GetVariablesAsync();
             _svc.GetTerminalAsync();
 
-            minuteTimer++;
-            if (minuteTimer >= 60)
+            _minuteTimer++;
+            if (_minuteTimer >= 60)
             {
-                minuteTimer = 0;
+                _minuteTimer = 0;
                 _svc.GetHistogramAsync();
             }
         }
 
-        
-
-
-
-        void _svc_GetVariablesCompleted(object sender, GetVariablesCompletedEventArgs e)
+        private void SvcGetVariablesCompleted(object sender, GetVariablesCompletedEventArgs e)
         {
             if (e.Error == null)
             {
                 ErrorText = "";
                 foreach (var variableDto in e.Result)
                 {
-                    bool VariableExsist = false;
-                    foreach (var item in Items.Where(s => s.Name == variableDto.VariableName))
+                    bool variableExsist = false;
+                    foreach (var item in Items)
                     {
-                        item.UpdateCurrentValue(variableDto.CurrentValue);
-                        VariableExsist = true;
+                        if (item.Name == variableDto.VariableName)
+                        {
+                            item.UpdateCurrentValue(variableDto.CurrentValue);
+                            variableExsist = true;
+                        }
                     }
-                    if (VariableExsist == false)
+                    if (variableExsist == false)
                     {
                         Items.Add(new NetVariableViewModel(variableDto));
                     }
                 }
-                LastUpdate = DateTime.Now;
+                _lastUpdate = DateTime.Now;
             }
             else
             {
@@ -163,14 +144,13 @@ namespace WpfClient
             }
         }
 
-        void _svc_GetTerminalCompleted(object sender, GetTerminalCompletedEventArgs e)
+        private void SvcGetTerminalCompleted(object sender, GetTerminalCompletedEventArgs e)
         {
             if (e.Error == null)
             {
                 ErrorText = "";
 
-
-                List<TerminalViewModel> itemsToRemove = new List<TerminalViewModel>();
+                var itemsToRemove = new List<TerminalViewModel>();
                 foreach (var item in TerminalAlarms)
                 {
                     try
@@ -190,14 +170,15 @@ namespace WpfClient
                     TerminalAlarms.Remove(item);
                 }
 
-
                 foreach (var itemToUpdate in e.Result)
                 {
 
                     try
                     {
                         (from t in TerminalAlarms
-                         where t.VariableName == itemToUpdate.VariableName && t.AlarmLevelName == itemToUpdate.AlarmLevelName
+                         where
+                             t.VariableName == itemToUpdate.VariableName &&
+                             t.AlarmLevelName == itemToUpdate.AlarmLevelName
                          select t).First().Update(itemToUpdate);
                     }
                     catch (Exception)
@@ -212,24 +193,22 @@ namespace WpfClient
             }
         }
 
-        void _svc_GetHistogramCompleted(object sender, GetHistogramCompletedEventArgs e)
+        private void SvcGetHistogramCompleted(object sender, GetHistogramCompletedEventArgs e)
         {
             if (e.Error == null)
             {
                 ErrorText = "";
 
-                
-
                 var itemsToAdd = (from h in e.Result
                                   orderby h.TimeStamp
                                   select new HistogramViewModel
-                                  {
-                                      SingleValue = h.SingleValue/1000,
-                                      TimeStamp = h.TimeStamp,
-                                  }).ToList();
+                                             {
+                                                 SingleValue = h.SingleValue/1000,
+                                                 TimeStamp = h.TimeStamp,
+                                             }).ToList();
+
                 foreach (var item in itemsToAdd)
                 {
-
                     try
                     {
                         Histogram.First(s => s.TimeStamp == item.TimeStamp).SingleValue = item.SingleValue;
@@ -240,9 +219,6 @@ namespace WpfClient
                         Histogram.Add(item);
                     }
                 }
-                
-
-
             }
             else
             {
@@ -250,127 +226,26 @@ namespace WpfClient
             }
         }
 
-
-
-         public void GetAverageLastDay(string varName)
+        public void GetAverageLastDay(string varName)
         {
             _svc.GetAverageLastDayAsync(varName);
         }
 
-         public void AcnowladgeAlarm(int alarmId)
-         {
-             _svc.AcknowledgeAlarmAsync(alarmId);
-         }
+        public void AcnowladgeAlarm(int alarmId)
+        {
+            _svc.AcknowledgeAlarmAsync(alarmId);
+        }
 
-         void _svc_GetAverageLastDayCompleted(object sender, GetAverageLastDayCompletedEventArgs e)
-         {
-             Average = e.Result;
-         }
+        private void SvcGetAverageLastDayCompleted(object sender, GetAverageLastDayCompletedEventArgs e)
+        {
+            Average = e.Result;
+        }
 
-        #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged(String propertyName)
+        protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
-            if (null != handler)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
-        #endregion
-    }
-
-
-#if  !SILVERLIGHT
-
-    public class AlarmColorConverter : System.Windows.Data.IMultiValueConverter
-    {
-        public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture)
-        {
-            throw new NotImplementedException();
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
     }
-
-#endif
-
-#if  SILVERLIGHT
-
-    public class AlarmColorConverterRadial : System.Windows.Data.IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            AlarmStatus alarmStatus = (AlarmStatus)value;
-            Resource res = new Resource();
-            switch (alarmStatus)
-            {
-                case AlarmStatus.Red_UnAcknowledgedActive:
-                    return res.Resources["Red"];
-                case AlarmStatus.Green_UnAcknowledgedInActive:
-                    return res.Resources["Green"];
-                case AlarmStatus.Blue_AcknowledgedActive:
-                    return res.Resources["Blue"];
-                default:
-                    return new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Black);
-
-                //case AlarmStatus.Red_UnAcknowledgedActive:
-                //    return new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Red); 
-                //case AlarmStatus.Green_UnAcknowledgedInActive:
-                //    return new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Green);
-                //case AlarmStatus.Blue_AcknowledgedActive:
-                //    return new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Blue);
-                //default:
-                //    return new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Black);
-
-            }
-            throw new NotImplementedException();
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class AlarmColorConverter : System.Windows.Data.IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            AlarmStatus alarmStatus = (AlarmStatus)value;
-            Resource res = new Resource();
-            switch (alarmStatus)
-            {
-                case AlarmStatus.Red_UnAcknowledgedActive:
-                    return new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Red);
-                case AlarmStatus.Green_UnAcknowledgedInActive:
-                    return new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Green);
-                case AlarmStatus.Blue_AcknowledgedActive:
-                    var blue = new System.Windows.Media.Color { R = 65, G = 105, B = 225, A=255 };
-                    return new System.Windows.Media.SolidColorBrush(blue);
-
-                default:
-                    return new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Black);
-
-            }
-            throw new NotImplementedException();
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-
-#endif
-
-
-
-
-
-
 }

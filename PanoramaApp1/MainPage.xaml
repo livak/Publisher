@@ -21,8 +21,7 @@
     xmlns:charting="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
     xmlns:chartingprimitives="clr-namespace:System.Windows.Controls.DataVisualization.Charting.Primitives;assembly=System.Windows.Controls.DataVisualization.Toolkit"
     xmlns:datavis="clr-namespace:System.Windows.Controls.DataVisualization;assembly=System.Windows.Controls.DataVisualization.Toolkit"
-    
-    shell:SystemTray.IsVisible="False">
+    xmlns:ViewModels="clr-namespace:PanoramaApp1.ViewModels" shell:SystemTray.IsVisible="False">
     
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
@@ -90,8 +89,8 @@
                 <Border CornerRadius="35" Background="#7F000000">
                     <ListBox  ItemsSource="{Binding TerminalAlarms}"  DoubleTap="ListBox_DoubleTap" >
                         <ListBox.Resources>
-                            <local:AlarmColorConverter x:Key="AlarmColorConverter"></local:AlarmColorConverter>
-                            <local:AlarmColorConverterRadial x:Key="AlarmColorConverterRadial"></local:AlarmColorConverterRadial>
+                            <ViewModels:AlarmColorConverter x:Key="AlarmColorConverter"></ViewModels:AlarmColorConverter>
+                            <ViewModels:AlarmColorConverterRadial x:Key="AlarmColorConverterRadial"></ViewModels:AlarmColorConverterRadial>
                         </ListBox.Resources>
 
                         <ListBox.ItemTemplate>

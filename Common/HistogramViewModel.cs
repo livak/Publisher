@@ -1,56 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using System.ComponentModel;
-using System.Collections.ObjectModel;
 
 #if SILVERLIGHT && WINDOWS_PHONE
-using PanoramaApp1;
 using PanoramaApp1.ServiceReference;
 #endif
-
 
 #if  !SILVERLIGHT
 using WpfClient.ServiceReference;
 #endif
 
-
-
 namespace WpfClient
 {
     public class HistogramViewModel : INotifyPropertyChanged
     {
-
-        #region INotifyProperties
-
-        private Single singleValue;
-
+        private Single _singleValue;
         public Single SingleValue
         {
-            get { return singleValue; }
-            set {
-
-                singleValue = value;
-                NotifyPropertyChanged("SingleValue"); }
+            get { return _singleValue; }
+            set { _singleValue = value; OnPropertyChanged("SingleValue"); }
         }
 
-        private DateTime timeStamp;
-
+        private DateTime _timeStamp;
         public DateTime TimeStamp
         {
-            get { return timeStamp; }
-            set { timeStamp = value; NotifyPropertyChanged("TimeStamp"); }
+            get { return _timeStamp; }
+            set { _timeStamp = value; OnPropertyChanged("TimeStamp"); }
         }
                
-        #endregion
-
-        #region Constructors
-
         public HistogramViewModel()
         {
-
         }
 
         public HistogramViewModel(HistogramDto histogramDto)
@@ -59,31 +37,17 @@ namespace WpfClient
             TimeStamp = histogramDto.TimeStamp;
         }
 
-
-        #endregion
-
-
-
         public void Update(HistogramDto histogramDto)
         {
             SingleValue = histogramDto.SingleValue;
             TimeStamp = histogramDto.TimeStamp;
         }
 
-
-        #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged(String propertyName)
+        protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
-            if (null != handler)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
-        #endregion
-
-
     }
-
 }
