@@ -150,7 +150,7 @@ namespace WebService
                         context.DeleteObject(alarm);
                     }
                 }
-                catch (Exception x)
+                catch (Exception)
                 {
                     // implement
                 }

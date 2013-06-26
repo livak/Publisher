@@ -5,6 +5,9 @@ using System.Windows;
 using NationalInstruments.NetworkVariable;
 
 using System.Collections.ObjectModel;
+using Publisher.Subscriber.Implementations.NationalInstruments;
+using Publisher.Subscriber.Implementations.Simulator;
+using Publisher.Subscriber.Intefaces;
 
 namespace Publisher
 {
@@ -13,7 +16,7 @@ namespace Publisher
         private const string ProcessLocationRemote = @"\\161.53.66.11\S1 Modbus Library";
         private const string ProcessLocationLocal = @"\\Jure-PC\jure";
         readonly ServiceReference.ServiceClient _svc = new ServiceReference.ServiceClient();
-        readonly ObservableCollection<MySingleSubscriber> _subscribers = new ObservableCollection<MySingleSubscriber>();
+        readonly ObservableCollection<ObservableSubscriber<Single>> _subscribers = new ObservableCollection<ObservableSubscriber<Single>>();
         readonly Browser _browser;
 
         public MainWindow()
@@ -64,34 +67,39 @@ namespace Publisher
 
         private void SubscribeVariables(IEnumerable<BrowserItem> variables)
         {
+            var random = new Random();
             foreach (BrowserItem browserItem in variables)
             {
                 if (browserItem.ItemType == BrowserItemType.Item && browserItem.GetVariableType() == typeof(Single))
                 {
-                    var subscriberSingle = new MySingleSubscriber(browserItem);
-                    subscriberSingle.ConnectCompleted += SubscriberSingleConnectCompleted;
-                    subscriberSingle.ConnectAsync();
+                    //IObservableSubscriber<Single> observableSubscriber = new ObservableSubscriber<float>(new Subscriber<float>(browserItem.Path), new Item(browserItem));
+                    IObservableSubscriber<Single> observableSubscriber = new ObservableSubscriber<float>(new SimulatedSubscriber<float>(random), new Item(browserItem));
+                    observableSubscriber.ConnectCompleted += ObservableSubscriberConnectCompleted;
+                    observableSubscriber.ConnectAsync();
                 }
             }
         }
 
-        void SubscriberSingleConnectCompleted(object sender, ConnectCompletedEventArgs e)
+        void ObservableSubscriberDataUpdated(object sender, Subscriber.Intefaces.DataUpdatedEventArgs<float> e)
         {
-            var subscriber = sender as MySingleSubscriber;
-            if (e.Error == null && subscriber != null)
-            {
-                subscriber.DataUpdated += SubscriberSingleDataUpdated;
-                _subscribers.Add(subscriber);
-            }
-            else
-            {
-                if (subscriber != null)
-                    MessageBox.Show("Variable: " + subscriber.BrowserItem.Name + " failed to subscribe");
-            }
+            _svc.UpdateVariableSingleAsync(((ObservableSubscriber<Single>)sender).BrowserItem.Name, e.Data.GetValue(), e.Data.TimeStamp);
         }
-        void SubscriberSingleDataUpdated(object sender, DataUpdatedEventArgs<float> e)
+
+        void ObservableSubscriberConnectCompleted(object sender, AsyncCompletedEventArgs e)
         {
-            _svc.UpdateVariableSingleAsync(((MySingleSubscriber)sender).BrowserItem.Name, e.Data.GetValue(), e.Data.TimeStamp);      
+            var subscriber = sender as ObservableSubscriber<Single>;
+            if (subscriber != null)
+            {
+                if (e.Error == null)
+                {
+                    subscriber.DataUpdated += ObservableSubscriberDataUpdated;
+                    _subscribers.Add(subscriber);
+                }
+                else
+                {
+                    MessageBox.Show("Variable: " + subscriber.BrowserItem.Name + " failed to subscribe");
+                }
+            }
         }
 
         private void BtnAddProcessClick(object sender, RoutedEventArgs e)

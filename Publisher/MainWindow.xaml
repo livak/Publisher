@@ -29,7 +29,7 @@
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="{Binding Path=BrowserItem.Name}" Width="60" ></TextBlock>
-                            <TextBlock Text="{Binding Path=CurrentValueSingle}" Width="80"></TextBlock>
+                            <TextBlock Text="{Binding Path=CurrentValueString}" Width="80"></TextBlock>
                             <TextBlock Text="{Binding Path=RefreshRate}"></TextBlock>
                             
                         </StackPanel>
