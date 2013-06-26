@@ -1,10 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
-using Publisher.Subscriber.Intefaces;
+using PowerMonitoring.DataSource.Common.Intefaces;
 
-namespace Publisher
+namespace PowerMonitoring.DataSource.Common
 {
-    class ObservableSubscriber<T> : IObservableSubscriber<T>, INotifyPropertyChanged
+    public class ObservableSubscriber<T> : IObservableSubscriber<T>, INotifyPropertyChanged
     {
         public IBrowserItem BrowserItem { get; private set; }
         private readonly ISubscriber<T> _subscriber;

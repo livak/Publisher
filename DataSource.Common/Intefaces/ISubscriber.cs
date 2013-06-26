@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace Publisher.Subscriber.Intefaces
+namespace PowerMonitoring.DataSource.Common.Intefaces
 {
-    internal interface ISubscriber<T>
+    public interface ISubscriber<T>
     {
         event EventHandler<DataUpdatedEventArgs<T>> DataUpdated;
         event EventHandler<AsyncCompletedEventArgs> ConnectCompleted;

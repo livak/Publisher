@@ -1,6 +1,6 @@
-﻿namespace Publisher.Subscriber.Intefaces
+﻿namespace PowerMonitoring.DataSource.Common.Intefaces
 {
-    internal interface IBrowserItem
+    public interface IBrowserItem
     {
         IBrowserItem ParentItem { get; }
         string Name { get; }

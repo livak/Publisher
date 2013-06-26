@@ -1,18 +1,18 @@
 ﻿using System;
 using System.ComponentModel;
 using NationalInstruments.NetworkVariable;
-using Publisher.Subscriber.Intefaces;
+using PowerMonitoring.DataSource.Common.Intefaces;
 
-namespace Publisher.Subscriber.Implementations.NationalInstruments
+namespace PowerMonitoring.DataSource.MeasurementStudio
 {
-    internal class Subscriber<T> : ISubscriber<T>
+    class NationalInstrumentsSubscriber<T> : ISubscriber<T>
     {
-        public event EventHandler<Intefaces.DataUpdatedEventArgs<T>> DataUpdated;
+        public event EventHandler<PowerMonitoring.DataSource.Common.Intefaces.DataUpdatedEventArgs<T>> DataUpdated;
         public event EventHandler<AsyncCompletedEventArgs> ConnectCompleted;
-
+            
         private readonly NetworkVariableSubscriber<T> _networkVariableSubscriber;
 
-        public Subscriber(string location)
+        public NationalInstrumentsSubscriber(string location)
         {
             _networkVariableSubscriber = new NetworkVariableSubscriber<T>(location);
             _networkVariableSubscriber.DataUpdated += NetworkVariableSubscriberDataUpdated;
@@ -26,7 +26,7 @@ namespace Publisher.Subscriber.Implementations.NationalInstruments
 
         private void NetworkVariableSubscriberDataUpdated(object sender, global::NationalInstruments.NetworkVariable.DataUpdatedEventArgs<T> e)
         {
-            var eventArgs = new Intefaces.DataUpdatedEventArgs<T>(new Data<T>(e.Data));
+            var eventArgs = new PowerMonitoring.DataSource.Common.Intefaces.DataUpdatedEventArgs<T>(new NationalInstrumentsData<T>(e.Data));
             DataUpdated(this, eventArgs);
         }
 

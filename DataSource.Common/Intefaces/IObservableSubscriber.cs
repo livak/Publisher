@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Publisher.Subscriber.Intefaces
+namespace PowerMonitoring.DataSource.Common.Intefaces
 {
-    internal interface IObservableSubscriber<T> : ISubscriber<T>
+    public interface IObservableSubscriber<T> : ISubscriber<T>
     {
         T CurrentValue { get; }
         string CurrentValueString { get; }

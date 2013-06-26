@@ -39,27 +39,11 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NationalInstruments.Common, Version=9.1.40.159, Culture=neutral, PublicKeyToken=dc6ad606294fc298, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\National Instruments\MeasurementStudioVS2010\DotNET\Assemblies\Current\NationalInstruments.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="NationalInstruments.NetworkVariable, Version=13.0.45.242, Culture=neutral, PublicKeyToken=4febd62461bf11a4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Windows\Microsoft.NET\assembly\GAC_MSIL\NationalInstruments.NetworkVariable\v4.0_13.0.45.242__4febd62461bf11a4\NationalInstruments.NetworkVariable.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.Entity" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -72,18 +56,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ObservableSubscriber.cs" />
-    <Compile Include="Subscriber\Implementations\NationalInstruments\BrowserItem.cs" />
-    <Compile Include="Subscriber\Implementations\NationalInstruments\Data.cs" />
-    <Compile Include="Subscriber\Implementations\NationalInstruments\Subscriber.cs" />
-    <Compile Include="Subscriber\Implementations\Simulator\SimulatedData.cs" />
-    <Compile Include="Subscriber\Implementations\Simulator\SimulatedSubscriber.cs" />
-    <Compile Include="Subscriber\Implementations\Simulator\SimulationItem.cs" />
-    <Compile Include="Subscriber\Intefaces\DataUpdatedEventArgs.cs" />
-    <Compile Include="Subscriber\Intefaces\IBrowserItem.cs" />
-    <Compile Include="Subscriber\Intefaces\IData.cs" />
-    <Compile Include="Subscriber\Intefaces\IObservableSubscriber.cs" />
-    <Compile Include="Subscriber\Intefaces\ISubscriber.cs" />
     <Compile Include="Service References\ServiceReference\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -103,7 +75,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MySubscriber.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -117,14 +88,11 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.config" />
-    <None Include="Properties\DataSources\PowerLogDBEntities.datasource" />
-    <None Include="Properties\DataSources\PowerLogDBEntities2.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -171,7 +139,23 @@
   <ItemGroup>
     <None Include="Service References\ServiceReference\Service1.disco" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\DataSource.Common\DataSource.Common.csproj">
+      <Project>{36756b08-3534-4ee7-8150-a05eec4677e1}</Project>
+      <Name>DataSource.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataSource.MeasurementStudio\DataSource.MeasurementStudio.csproj">
+      <Project>{558d1a59-15f7-4e2c-8309-90601d789aa2}</Project>
+      <Name>DataSource.MeasurementStudio</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataSource.Simulator\DataSource.Simulator.csproj">
+      <Project>{de2e85cb-4eac-42ac-921d-78f494fb936b}</Project>
+      <Name>DataSource.Simulator</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Subscriber\Implementations\NationalInstruments\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

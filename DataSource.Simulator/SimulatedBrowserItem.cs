@@ -1,14 +1,14 @@
-﻿using Publisher.Subscriber.Intefaces;
+﻿using PowerMonitoring.DataSource.Common.Intefaces;
 
-namespace Publisher.Subscriber.Implementations.Simulator
+namespace PowerMonitoring.DataSource.Simulator
 {
-    class SimulationItem : IBrowserItem
+    class SimulatedBrowserItem : IBrowserItem
     {
         public IBrowserItem ParentItem { get { return this; } }
         public string Name { get; private set; }
         public string Path { get; private set; }
 
-        public SimulationItem(string name, string path)
+        public SimulatedBrowserItem(string name, string path)
         {
             Name = name;
             Path = path;

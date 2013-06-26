@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Publisher.Subscriber.Intefaces
+namespace PowerMonitoring.DataSource.Common.Intefaces
 {
-    internal class DataUpdatedEventArgs<T> : EventArgs
+    public class DataUpdatedEventArgs<T> : EventArgs
     {
         public IData<T> Data { get; private set; }
 

@@ -1,10 +1,10 @@
 ﻿using System;
 using NationalInstruments.NetworkVariable;
-using Publisher.Subscriber.Intefaces;
+using PowerMonitoring.DataSource.Common.Intefaces;
 
-namespace Publisher.Subscriber.Implementations.NationalInstruments
+namespace PowerMonitoring.DataSource.MeasurementStudio
 {
-    class Data<T> : IData<T>
+    class NationalInstrumentsData<T> : IData<T>
     {
         public bool HasQuality { get { return _data.HasQuality; } }
         public bool HasServerError { get { return _data.HasServerError; } }
@@ -16,7 +16,7 @@ namespace Publisher.Subscriber.Implementations.NationalInstruments
 
         private readonly NetworkVariableData<T> _data;
 
-        public Data(NetworkVariableData<T> data)
+        public NationalInstrumentsData(NetworkVariableData<T> data)
         {
             _data = data;
         }

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Timers;
+using PowerMonitoring.DataSource.Common.Intefaces;
 
-using Publisher.Subscriber.Intefaces;
-
-namespace Publisher.Subscriber.Implementations.Simulator
+namespace PowerMonitoring.DataSource.Simulator
 {
     class SimulatedSubscriber<T> : ISubscriber<T>
     {

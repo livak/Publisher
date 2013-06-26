@@ -1,9 +1,9 @@
 ﻿using System;
-using Publisher.Subscriber.Intefaces;
+using PowerMonitoring.DataSource.Common.Intefaces;
 
-namespace Publisher.Subscriber.Implementations.Simulator
+namespace PowerMonitoring.DataSource.Simulator
 {
-    public class SimulatedData<T> : IData<T>
+    class SimulatedData<T> : IData<T>
     {
         public bool HasQuality { get; private set; }
         public bool HasServerError { get; private set; }

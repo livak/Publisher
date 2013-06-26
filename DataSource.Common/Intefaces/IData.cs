@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Publisher.Subscriber.Intefaces
+namespace PowerMonitoring.DataSource.Common.Intefaces
 {
-    internal interface IData<out T>
+    public interface IData<out T>
     {
         T GetValue();
         bool HasQuality { get; }
