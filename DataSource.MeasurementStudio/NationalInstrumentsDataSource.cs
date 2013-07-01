@@ -11,15 +11,14 @@ namespace PowerMonitoring.DataSource.MeasurementStudio
 {
     public class NationalInstrumentsDataSource<T> : IDataSource<T> where T : struct
     {
-        public event EventHandler<Common.Intefaces.DataUpdatedEventArgs<T>> DataUpdated;
         public event EventHandler<MessageEventArgs> Massage;
-
         public void OnMassage(string message)
         {
             EventHandler<MessageEventArgs> handler = Massage;
             if (handler != null) handler(this, new MessageEventArgs(message));
         }
 
+        public event EventHandler<Common.Intefaces.DataUpdatedEventArgs<T>> DataUpdated;
         public void OnSubscriberDataUpdated(object sender, Common.Intefaces.DataUpdatedEventArgs<T> e)
         {
             EventHandler<Common.Intefaces.DataUpdatedEventArgs<T>> handler = DataUpdated;
@@ -36,7 +35,7 @@ namespace PowerMonitoring.DataSource.MeasurementStudio
             _browser.GetSubitemsCompleted += BrowserGetSubitemsCompleted;
         }
 
-        public void SubscribeFromLocation(string location)
+        public void SubscribeFromLocationAsync(string location)
         {
             LoadBrowserToGetSubItemsAsync(location);
         }
@@ -103,7 +102,6 @@ namespace PowerMonitoring.DataSource.MeasurementStudio
             }
         }
 
-
         void SubscriberDataUpdated(object sender, Common.Intefaces.DataUpdatedEventArgs<T> e)
         {
             OnSubscriberDataUpdated(sender, e);
@@ -146,7 +144,7 @@ namespace PowerMonitoring.DataSource.MeasurementStudio
             _browser.GetSubitemsCompleted += BrowserGetSubitemsCompleted;
         }
 
-        public void SubscribeFromLocation(string location)
+        public void SubscribeFromLocationAsync(string location)
         {
             LoadBrowserToGetSubItemsAsync(location);
         }

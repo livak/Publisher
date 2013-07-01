@@ -17,6 +17,7 @@ namespace Publisher
         private readonly NationalInstrumentsDataSource<double> _dataSource;
         private readonly NationalInstrumentsDataSource _data;
         private readonly SimulatedDataSource<int> _simulatedDataSource;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -26,13 +27,13 @@ namespace Publisher
             _dataSource = new NationalInstrumentsDataSource<double>(_subscribers);
             _dataSource.DataUpdated += ObservableSubscriberDataUpdated;
             _dataSource.Massage += dataSource_OnMassage;
-            _dataSource.SubscribeFromLocation(ProcessLocationLocal);
+            _dataSource.SubscribeFromLocationAsync(ProcessLocationLocal);
 
             _data=new NationalInstrumentsDataSource(_subscribers);
             _data.Massage += dataSource_OnMassage;
             _data.DataUpdated += ObservableSubscriberDataUpdated;
-            _data.SubscribeFromLocation(ProcessLocationLocal);
-            _data.SubscribeFromLocation(ProcessLocationRemote);
+            _data.SubscribeFromLocationAsync(ProcessLocationLocal);
+            _data.SubscribeFromLocationAsync(ProcessLocationRemote);
 
             _simulatedDataSource=new SimulatedDataSource<int>(_subscribers);
             _simulatedDataSource.DataUpdated += ObservableSubscriberDataUpdated;
