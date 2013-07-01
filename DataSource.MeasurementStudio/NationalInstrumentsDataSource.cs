@@ -9,15 +9,8 @@ using PowerMonitoring.DataSource.Common.Intefaces;
 
 namespace PowerMonitoring.DataSource.MeasurementStudio
 {
-    public class NationalInstrumentsDataSource<T> : IDataSource<T> where T : struct
+    public class NationalInstrumentsDataSource<T> :NationalInstrumentsDataSourceBase, IDataSource<T> where T : struct
     {
-        public event EventHandler<MessageEventArgs> Massage;
-        public void OnMassage(string message)
-        {
-            EventHandler<MessageEventArgs> handler = Massage;
-            if (handler != null) handler(this, new MessageEventArgs(message));
-        }
-
         public event EventHandler<Common.Intefaces.DataUpdatedEventArgs<T>> DataUpdated;
         public void OnSubscriberDataUpdated(object sender, Common.Intefaces.DataUpdatedEventArgs<T> e)
         {
@@ -25,54 +18,14 @@ namespace PowerMonitoring.DataSource.MeasurementStudio
             if (handler != null) handler(sender, e);
         }
 
-        readonly ObservableCollection<IObservableSubscriberBase> _subscribers;
-        readonly Browser _browser;
-
         public NationalInstrumentsDataSource(ObservableCollection<IObservableSubscriberBase> subscribers)
         {
-            _subscribers = subscribers;
-            _browser = new Browser();
-            _browser.GetSubitemsCompleted += BrowserGetSubitemsCompleted;
+            Subscribers = subscribers;
+            Browser = new Browser();
+            Browser.GetSubitemsCompleted += BrowserGetSubitemsCompleted;
         }
 
-        public void SubscribeFromLocationAsync(string location)
-        {
-            LoadBrowserToGetSubItemsAsync(location);
-        }
-
-        protected void LoadBrowserToGetSubItemsAsync(string processLocation)
-        {
-            try
-            {
-                BrowserItem process;
-                if (_browser.TryGetItem(processLocation, out process))
-                {
-                    _browser.GetSubitemsAsync(process, _browser);
-                }
-                else
-                {
-                    OnMassage("Failed to get process from location \n\r:" + processLocation);
-                }
-            }
-            catch (Exception ex)
-            {
-                OnMassage(ex.Message);
-            }
-        }
-
-        private void BrowserGetSubitemsCompleted(object sender, GetSubitemsCompletedEventArgs e)
-        {
-            if (e.Error == null && e.Items != null)
-            {
-                SubscribeVariables(e.Items);
-            }
-            else
-            {
-                OnMassage("Failed to get process SubItems");
-            }
-        }
-
-        private void SubscribeVariables(IEnumerable<BrowserItem> variables)
+        protected override void SubscribeVariables(IEnumerable<BrowserItem> variables)
         {
             foreach (BrowserItem browserItem in variables)
             {
@@ -85,7 +38,7 @@ namespace PowerMonitoring.DataSource.MeasurementStudio
             }
         }
 
-        private void ObservableSubscriberConnectCompleted(object sender, AsyncCompletedEventArgs e)
+        protected override void ObservableSubscriberConnectCompleted(object sender, AsyncCompletedEventArgs e)
         {
             var subscriber = sender as IObservableSubscriber<T>;
             if (subscriber != null)
@@ -93,7 +46,7 @@ namespace PowerMonitoring.DataSource.MeasurementStudio
                 if (e.Error == null)
                 {
                     subscriber.DataUpdated += SubscriberDataUpdated;
-                    _subscribers.Add(subscriber);
+                    Subscribers.Add(subscriber);
                 }
                 else
                 {
@@ -106,28 +59,15 @@ namespace PowerMonitoring.DataSource.MeasurementStudio
         {
             OnSubscriberDataUpdated(sender, e);
         }
-
-        public void Dispose()
-        {
-            if (_browser != null)
-            {
-                _browser.Dispose();
-            }
-        }
     }
 
 
 
 
-    public class NationalInstrumentsDataSource : IDataSource
-    {
-        public event EventHandler<MessageEventArgs> Massage;
-        public void OnMassage(string message)
-        {
-            EventHandler<MessageEventArgs> handler = Massage;
-            if (handler != null) handler(this, new MessageEventArgs(message));
-        }
 
+
+    public class NationalInstrumentsDataSource :NationalInstrumentsDataSourceBase, IDataSource
+    {
         public event EventHandler<DataUpdatedEventArgs> DataUpdated;
         public void OnSubscriberDataUpdated(object sender, DataUpdatedEventArgs e)
         {
@@ -135,53 +75,15 @@ namespace PowerMonitoring.DataSource.MeasurementStudio
             if (handler != null) handler(sender, e);
         }
 
-        readonly ObservableCollection<IObservableSubscriberBase> _subscribers;
-        readonly Browser _browser;
         public NationalInstrumentsDataSource(ObservableCollection<IObservableSubscriberBase> subscribers)
         {
-            _subscribers = subscribers;
-            _browser = new Browser();
-            _browser.GetSubitemsCompleted += BrowserGetSubitemsCompleted;
+            Subscribers = subscribers;
+            Browser = new Browser();
+            Browser.GetSubitemsCompleted += BrowserGetSubitemsCompleted;
         }
 
-        public void SubscribeFromLocationAsync(string location)
-        {
-            LoadBrowserToGetSubItemsAsync(location);
-        }
 
-        protected void LoadBrowserToGetSubItemsAsync(string processLocation)
-        {
-            try
-            {
-                BrowserItem process;
-                if (_browser.TryGetItem(processLocation, out process))
-                {
-                    _browser.GetSubitemsAsync(process, _browser);
-                }
-                else
-                {
-                    OnMassage("Failed to get process from location \n\r:" + processLocation);
-                }
-            }
-            catch (Exception ex)
-            {
-                OnMassage(ex.Message);
-            }
-        }
-
-        protected void BrowserGetSubitemsCompleted(object sender, GetSubitemsCompletedEventArgs e)
-        {
-            if (e.Error == null && e.Items != null)
-            {
-                SubscribeVariables(e.Items);
-            }
-            else
-            {
-                OnMassage("Failed to get process SubItems");
-            }
-        }
-
-        protected void SubscribeVariables(IEnumerable<BrowserItem> variables)
+        protected override void SubscribeVariables(IEnumerable<BrowserItem> variables)
         {
             foreach (BrowserItem browserItem in variables)
             {
@@ -207,7 +109,7 @@ namespace PowerMonitoring.DataSource.MeasurementStudio
             }
         }
 
-        private void ObservableSubscriberConnectCompleted(object sender, AsyncCompletedEventArgs e)
+        protected override void ObservableSubscriberConnectCompleted(object sender, AsyncCompletedEventArgs e)
         {
             var subscriber = sender as IObservableSubscriberBase;
          
@@ -228,20 +130,12 @@ namespace PowerMonitoring.DataSource.MeasurementStudio
                     Delegate handler = Delegate.CreateDelegate(eventHandlerType, this, method);
                     eventInfo.AddEventHandler(subscriber, handler);
 
-                    _subscribers.Add(subscriber);
+                    Subscribers.Add(subscriber);
                 }
                 else
                 {
                     OnMassage("Variable: " + subscriber.BrowserItem.Name + " failed to subscribe");
                 }
-            }
-        }
-
-        public void Dispose()
-        {
-            if (_browser != null)
-            {
-                _browser.Dispose();
             }
         }
     }

@@ -44,6 +44,7 @@
     <Compile Include="NationalInstrumentsBrowserItem.cs" />
     <Compile Include="NationalInstrumentsData.cs" />
     <Compile Include="NationalInstrumentsDataSource.cs" />
+    <Compile Include="NationalInstrumentsDataSourceBase.cs" />
     <Compile Include="NationalInstrumentsSubscriber.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
