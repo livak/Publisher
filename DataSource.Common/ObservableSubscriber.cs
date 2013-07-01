@@ -4,7 +4,7 @@ using PowerMonitoring.DataSource.Common.Intefaces;
 
 namespace PowerMonitoring.DataSource.Common
 {
-    public class ObservableSubscriber<T> : IObservableSubscriber<T>, INotifyPropertyChanged
+    public class ObservableSubscriber<T> : IObservableSubscriber<T>, INotifyPropertyChanged where T : struct
     {
         public IBrowserItem BrowserItem { get; private set; }
         private readonly ISubscriber<T> _subscriber;
@@ -46,7 +46,20 @@ namespace PowerMonitoring.DataSource.Common
         }
 
         public event EventHandler<DataUpdatedEventArgs<T>> DataUpdated;
+        public void OnDataUpdated(DataUpdatedEventArgs<T> e)
+        {
+            EventHandler<DataUpdatedEventArgs<T>> handler = DataUpdated;
+            if (handler != null) handler(this, e);
+        }
+
         public event EventHandler<AsyncCompletedEventArgs> ConnectCompleted;
+        public void OnConnectCompleted(AsyncCompletedEventArgs e)
+        {
+            EventHandler<AsyncCompletedEventArgs> handler = ConnectCompleted;
+            if (handler != null) handler(this, e);
+        }
+
+
         public void ConnectAsync()
         {
             _subscriber.ConnectAsync();
@@ -62,20 +75,18 @@ namespace PowerMonitoring.DataSource.Common
 
         void SubscriberConnectCompleted(object sender, AsyncCompletedEventArgs e)
         {
-            ConnectCompleted(this, e);
+            OnConnectCompleted(e);
         }
 
         void SubscriberDataUpdated(object sender, DataUpdatedEventArgs<T> e)
         {
-            if (DataUpdated != null)
-            {
-                DataUpdated(this, e);
-            }
+            OnDataUpdated(e);
             CurrentValue = e.Data.GetValue();
             CurrentValueString = CurrentValue.ToString();
-            RefreshRate = (int) (e.Data.TimeStamp - TimeStamp).TotalMilliseconds;
+            RefreshRate = (int)(e.Data.TimeStamp - TimeStamp).TotalMilliseconds;
             TimeStamp = e.Data.TimeStamp;
             Quality = e.Data.Quality.ToString();
+
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

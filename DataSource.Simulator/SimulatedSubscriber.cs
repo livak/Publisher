@@ -5,10 +5,21 @@ using PowerMonitoring.DataSource.Common.Intefaces;
 
 namespace PowerMonitoring.DataSource.Simulator
 {
-    class SimulatedSubscriber<T> : ISubscriber<T>
+    class SimulatedSubscriber<T> : ISubscriber<T> where T : struct
     {
         public event EventHandler<DataUpdatedEventArgs<T>> DataUpdated;
+        public void OnDataUpdated(DataUpdatedEventArgs<T> e)
+        {
+            EventHandler<DataUpdatedEventArgs<T>> handler = DataUpdated;
+            if (handler != null) handler(this, e);
+        }
+
         public event EventHandler<AsyncCompletedEventArgs> ConnectCompleted;
+        public void OnConnectCompleted(AsyncCompletedEventArgs e)
+        {
+            EventHandler<AsyncCompletedEventArgs> handler = ConnectCompleted;
+            if (handler != null) handler(this, e);
+        }
 
         private readonly Random _random;
 
@@ -23,12 +34,12 @@ namespace PowerMonitoring.DataSource.Simulator
 
         public void ConnectAsync()
         {
-            ConnectCompleted(this, new AsyncCompletedEventArgs(null, false, new object()));
+            OnConnectCompleted(new AsyncCompletedEventArgs(null, false, new object()));
         }
 
         void TimerElapsed(object sender, ElapsedEventArgs e)
         {
-            DataUpdated(this, new DataUpdatedEventArgs<T>(new SimulatedData<T>(_random)));
+            OnDataUpdated(new DataUpdatedEventArgs<T>(new SimulatedData<T>(_random)));
         }
     }
 }

@@ -2,37 +2,46 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Reflection;
 using NationalInstruments.NetworkVariable;
 using PowerMonitoring.DataSource.Common;
 using PowerMonitoring.DataSource.Common.Intefaces;
 
 namespace PowerMonitoring.DataSource.MeasurementStudio
 {
-    public class NationalInstrumentsDataSource : IDataSource
+    public class NationalInstrumentsDataSource<T> : IDataSource<T> where T : struct
     {
-        public event EventHandler<MessageEventArgs> OnMassage;
-        public event EventHandler<PowerMonitoring.DataSource.Common.Intefaces.DataUpdatedEventArgs<float>> SubscriberDataUpdated;
+        public event EventHandler<Common.Intefaces.DataUpdatedEventArgs<T>> DataUpdated;
+        public event EventHandler<MessageEventArgs> Massage;
 
-        private const string ProcessLocationRemote = @"\\161.53.66.11\S1 Modbus Library";
-        private const string ProcessLocationLocal = @"\\Jure-PC\jure";
-
-        private readonly ObservableCollection<ObservableSubscriber<Single>> _subscribers;
-
-        private readonly Browser _browser;
-
-        public NationalInstrumentsDataSource(ObservableCollection<ObservableSubscriber<float>> subscribers)
+        public void OnMassage(string message)
         {
-            _subscribers = subscribers;
-
-            _browser = new Browser();
-            _browser.GetSubitemsCompleted += BrowserGetSubitemsCompleted;
-
-            LoadBrowserToGetSubItemsAsync(ProcessLocationRemote);
-            LoadBrowserToGetSubItemsAsync(ProcessLocationLocal);
-
+            EventHandler<MessageEventArgs> handler = Massage;
+            if (handler != null) handler(this, new MessageEventArgs(message));
         }
 
-        private void LoadBrowserToGetSubItemsAsync(string processLocation)
+        public void OnSubscriberDataUpdated(object sender, Common.Intefaces.DataUpdatedEventArgs<T> e)
+        {
+            EventHandler<Common.Intefaces.DataUpdatedEventArgs<T>> handler = DataUpdated;
+            if (handler != null) handler(sender, e);
+        }
+
+        readonly ObservableCollection<object> _subscribers;
+        readonly Browser _browser;
+
+        public NationalInstrumentsDataSource(ObservableCollection<object> subscribers)
+        {
+            _subscribers = subscribers;
+            _browser = new Browser();
+            _browser.GetSubitemsCompleted += BrowserGetSubitemsCompleted;
+        }
+
+        public void SubscribeFromLocation(string location)
+        {
+            LoadBrowserToGetSubItemsAsync(location);
+        }
+
+        protected void LoadBrowserToGetSubItemsAsync(string processLocation)
         {
             try
             {
@@ -43,12 +52,12 @@ namespace PowerMonitoring.DataSource.MeasurementStudio
                 }
                 else
                 {
-                    TriggerMessageEvent("Failed to get process from location \n\r:" + processLocation);
+                    OnMassage("Failed to get process from location \n\r:" + processLocation);
                 }
             }
             catch (Exception ex)
             {
-                TriggerMessageEvent(ex.Message);
+                OnMassage(ex.Message);
             }
         }
 
@@ -60,7 +69,7 @@ namespace PowerMonitoring.DataSource.MeasurementStudio
             }
             else
             {
-                TriggerMessageEvent("Failed to get process SubItems");
+                OnMassage("Failed to get process SubItems");
             }
         }
 
@@ -68,9 +77,9 @@ namespace PowerMonitoring.DataSource.MeasurementStudio
         {
             foreach (BrowserItem browserItem in variables)
             {
-                if (browserItem.ItemType == BrowserItemType.Item && browserItem.GetVariableType() == typeof (Single))
+                if (browserItem.ItemType == BrowserItemType.Item && browserItem.GetVariableType() == typeof(T))
                 {
-                    IObservableSubscriber<Single> observableSubscriber = new ObservableSubscriber<float>(new NationalInstrumentsSubscriber<float>(browserItem.Path), new NationalInstrumentsBrowserItem(browserItem));
+                    IObservableSubscriber<T> observableSubscriber = new ObservableSubscriber<T>(new NationalInstrumentsSubscriber<T>(browserItem.Path), new NationalInstrumentsBrowserItem(browserItem));
                     observableSubscriber.ConnectCompleted += ObservableSubscriberConnectCompleted;
                     observableSubscriber.ConnectAsync();
                 }
@@ -79,27 +88,154 @@ namespace PowerMonitoring.DataSource.MeasurementStudio
 
         private void ObservableSubscriberConnectCompleted(object sender, AsyncCompletedEventArgs e)
         {
-            var subscriber = sender as ObservableSubscriber<Single>;
+            var subscriber = sender as IObservableSubscriber<T>;
             if (subscriber != null)
             {
                 if (e.Error == null)
                 {
                     subscriber.DataUpdated += SubscriberDataUpdated;
                     _subscribers.Add(subscriber);
-
                 }
                 else
                 {
-                    TriggerMessageEvent("Variable: " + subscriber.BrowserItem.Name + " failed to subscribe");
+                    OnMassage("Variable: " + subscriber.BrowserItem.Name + " failed to subscribe");
                 }
             }
         }
 
-        private void TriggerMessageEvent(string message)
+
+        void SubscriberDataUpdated(object sender, Common.Intefaces.DataUpdatedEventArgs<T> e)
         {
-            if (OnMassage != null)
+            OnSubscriberDataUpdated(sender, e);
+        }
+
+        public void Dispose()
+        {
+            if (_browser != null)
             {
-                OnMassage(this, new MessageEventArgs(message));
+                _browser.Dispose();
+            }
+        }
+    }
+
+
+
+
+    public class NationalInstrumentsDataSource : IDataSource
+    {
+        public event EventHandler<MessageEventArgs> Massage;
+        public void OnMassage(string message)
+        {
+            EventHandler<MessageEventArgs> handler = Massage;
+            if (handler != null) handler(this, new MessageEventArgs(message));
+        }
+
+        public event EventHandler<DataUpdatedEventArgs> DataUpdated;
+        public void OnSubscriberDataUpdated(object sender, DataUpdatedEventArgs e)
+        {
+            EventHandler<DataUpdatedEventArgs> handler = DataUpdated;
+            if (handler != null) handler(sender, e);
+        }
+
+        readonly ObservableCollection<object> _subscribers;
+        readonly Browser _browser;
+        public NationalInstrumentsDataSource(ObservableCollection<object> subscribers)
+        {
+            _subscribers = subscribers;
+            _browser = new Browser();
+            _browser.GetSubitemsCompleted += BrowserGetSubitemsCompleted;
+        }
+
+        public void SubscribeFromLocation(string location)
+        {
+            LoadBrowserToGetSubItemsAsync(location);
+        }
+
+        protected void LoadBrowserToGetSubItemsAsync(string processLocation)
+        {
+            try
+            {
+                BrowserItem process;
+                if (_browser.TryGetItem(processLocation, out process))
+                {
+                    _browser.GetSubitemsAsync(process, _browser);
+                }
+                else
+                {
+                    OnMassage("Failed to get process from location \n\r:" + processLocation);
+                }
+            }
+            catch (Exception ex)
+            {
+                OnMassage(ex.Message);
+            }
+        }
+
+        protected void BrowserGetSubitemsCompleted(object sender, GetSubitemsCompletedEventArgs e)
+        {
+            if (e.Error == null && e.Items != null)
+            {
+                SubscribeVariables(e.Items);
+            }
+            else
+            {
+                OnMassage("Failed to get process SubItems");
+            }
+        }
+
+        protected void SubscribeVariables(IEnumerable<BrowserItem> variables)
+        {
+            foreach (BrowserItem browserItem in variables)
+            {
+                if (browserItem.ItemType == BrowserItemType.Item)
+                {
+                    Type elementType = browserItem.GetVariableType();
+
+                    Type subscriber = typeof(ObservableSubscriber<>);
+                    Type niSubscriber = typeof(NationalInstrumentsSubscriber<>);
+
+                    Type combinedType = subscriber.MakeGenericType(elementType);
+                    Type niCombinedType = niSubscriber.MakeGenericType(elementType);
+
+                    //NationalInstrumentsSubscriber<T>
+                    var nationalInstrumentsSubscriber = (ISubscriberBase) Activator.CreateInstance(niCombinedType, browserItem.Path);
+
+                    //ObservableSubscriber<T>
+                    var observableSubscriber = (ISubscriberBase) Activator.CreateInstance(combinedType, nationalInstrumentsSubscriber, new NationalInstrumentsBrowserItem(browserItem));
+
+                    observableSubscriber.ConnectCompleted += ObservableSubscriberConnectCompleted;
+                    observableSubscriber.ConnectAsync();
+                }
+            }
+        }
+
+        private void ObservableSubscriberConnectCompleted(object sender, AsyncCompletedEventArgs e)
+        {
+            var subscriber = sender as IObservableSubscriberBase;
+         
+            if (subscriber != null)
+            {
+                if (e.Error == null)
+                {
+                    //site: http://stackoverflow.com/questions/1121441/addeventhandler-using-reflection
+                    
+                    //Find event
+                    EventInfo eventInfo = subscriber.GetType().GetEvent("DataUpdated");
+                    Type eventHandlerType = eventInfo.EventHandlerType;
+
+                    // Find the handler method
+                    MethodInfo method = GetType().GetMethod("OnSubscriberDataUpdated");
+
+                    // Subscribe to the event
+                    Delegate handler = Delegate.CreateDelegate(eventHandlerType, this, method);
+                    eventInfo.AddEventHandler(subscriber, handler);
+
+                    _subscribers.Add(subscriber);
+                }
+                else
+                {
+                    OnMassage("Variable: " + subscriber.BrowserItem.Name + " failed to subscribe");
+                }
             }
         }
 

@@ -18,18 +18,20 @@
                 </ComboBox>
                 <Button Name="btnAddProcess" Click="BtnAddProcessClick">Add process</Button>
             </StackPanel>
-            <StackPanel DockPanel.Dock="Top" Width="300" Orientation="Horizontal" HorizontalAlignment="Left">
+            <StackPanel DockPanel.Dock="Top" Width="350" Orientation="Horizontal" HorizontalAlignment="Left">
                 <Label> Name</Label>
                 <Label Margin="15,0,50,0">Value</Label>
                 <Label>Refresh Rate</Label>
+                <Label>Type</Label>
             </StackPanel>
-            <ListBox  ItemsSource="{Binding}" IsSynchronizedWithCurrentItem="True" DockPanel.Dock="Left" Width="300">
+            <ListBox  ItemsSource="{Binding}" IsSynchronizedWithCurrentItem="True" DockPanel.Dock="Left" Width="350">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Path=BrowserItem.Name}" Width="60" ></TextBlock>
+                            <TextBlock Text="{Binding Path=BrowserItem.Name}" Width="100" ></TextBlock>
                             <TextBlock Text="{Binding Path=CurrentValueString}" Width="80"></TextBlock>
-                            <TextBlock Text="{Binding Path=RefreshRate}"></TextBlock>
+                            <TextBlock Text="{Binding Path=RefreshRate}" Width="60"></TextBlock>
+                            <TextBlock Text="{Binding Path=BrowserItem.Type}"></TextBlock>
                             
                         </StackPanel>
                     </DataTemplate>

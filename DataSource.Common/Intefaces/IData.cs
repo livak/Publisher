@@ -2,9 +2,14 @@
 
 namespace PowerMonitoring.DataSource.Common.Intefaces
 {
-    public interface IData<out T>
+    public interface IData<out T> : IData where T : struct
     {
-        T GetValue();
+        new T GetValue();
+    }
+
+    public interface IData
+    {
+        object GetValue();
         bool HasQuality { get; }
         bool HasServerError { get; }
         bool HasTimeStamp { get; }

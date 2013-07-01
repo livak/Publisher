@@ -6,25 +6,48 @@ using PowerMonitoring.DataSource.Common.Intefaces;
 
 namespace PowerMonitoring.DataSource.Simulator
 {
-    public class SimulatedDataSource : IDataSource
+    public class SimulatedDataSource<T> : IDataSource<T> where T : struct
     {
-        public event EventHandler<MessageEventArgs> OnMassage;
-        public event EventHandler<DataUpdatedEventArgs<float>> SubscriberDataUpdated;
+        private readonly ObservableCollection<object> _observableSubscribers;
+        public event EventHandler<MessageEventArgs> Massage;
 
-        public SimulatedDataSource(ObservableCollection<ObservableSubscriber<float>> observableSubscribers)
+        public void OnMassage(MessageEventArgs e)
+        {
+            EventHandler<MessageEventArgs> handler = Massage;
+            if (handler != null) handler(this, e);
+        }
+
+        public event EventHandler<DataUpdatedEventArgs<T>> DataUpdated;
+        public void OnSubscriberDataUpdated(object sender, DataUpdatedEventArgs<T> e)
+        {
+            EventHandler<DataUpdatedEventArgs<T>> handler = DataUpdated;
+            if (handler != null) handler(sender, e);
+        }
+
+        public SimulatedDataSource(ObservableCollection<object> observableSubscribers)
+        {
+            _observableSubscribers = observableSubscribers;
+        }
+
+        public void Subscribe(int count)
         {
             var random = new Random();
 
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < count; i++)
             {
-                IBrowserItem simulatedBrowserItem = new SimulatedBrowserItem("pero-" + i.ToString(CultureInfo.InvariantCulture), i.ToString(CultureInfo.InvariantCulture));
-                ISubscriber<float> simulatedSubscriber = new SimulatedSubscriber<float>(random);
+                IBrowserItem simulatedBrowserItem = new SimulatedBrowserItem("pero-" + i.ToString(CultureInfo.InvariantCulture), i.ToString(CultureInfo.InvariantCulture), typeof(T));
+                ISubscriber<T> simulatedSubscriber = new SimulatedSubscriber<T>(random);
 
-                var observableSubscriber = new ObservableSubscriber<float>(simulatedSubscriber, simulatedBrowserItem);
-                observableSubscriber.DataUpdated += SubscriberDataUpdated;
+                var observableSubscriber = new ObservableSubscriber<T>(simulatedSubscriber, simulatedBrowserItem);
+                observableSubscriber.DataUpdated += ObservableSubscriberDataUpdated;
 
-                observableSubscribers.Add(observableSubscriber);
+                _observableSubscribers.Add(observableSubscriber);
             }
+        }
+
+        void ObservableSubscriberDataUpdated(object sender, DataUpdatedEventArgs<T> e)
+        {
+            OnSubscriberDataUpdated(sender, e);
         }
 
         public void Dispose()

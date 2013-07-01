@@ -4,7 +4,7 @@ using PowerMonitoring.DataSource.Common.Intefaces;
 
 namespace PowerMonitoring.DataSource.MeasurementStudio
 {
-    class NationalInstrumentsData<T> : IData<T>
+    class NationalInstrumentsData<T> : IData<T> where T : struct
     {
         public bool HasQuality { get { return _data.HasQuality; } }
         public bool HasServerError { get { return _data.HasServerError; } }
@@ -24,6 +24,11 @@ namespace PowerMonitoring.DataSource.MeasurementStudio
         public T GetValue()
         {
             return _data.GetValue();
+        }
+
+        object IData.GetValue()
+        {
+            return GetValue();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using NationalInstruments.NetworkVariable;
+﻿using System;
+using NationalInstruments.NetworkVariable;
 using PowerMonitoring.DataSource.Common.Intefaces;
 
 namespace PowerMonitoring.DataSource.MeasurementStudio
@@ -11,6 +12,7 @@ namespace PowerMonitoring.DataSource.MeasurementStudio
 
         public string Name { get { return _browserItem.Name; } }
         public string Path { get { return _browserItem.Path; } }
+        public Type Type { get { return _browserItem.GetVariableType(); } }
 
         public NationalInstrumentsBrowserItem(BrowserItem browserItem)
         {

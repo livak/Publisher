@@ -5,11 +5,22 @@ using PowerMonitoring.DataSource.Common.Intefaces;
 
 namespace PowerMonitoring.DataSource.MeasurementStudio
 {
-    class NationalInstrumentsSubscriber<T> : ISubscriber<T>
+    class NationalInstrumentsSubscriber<T> : ISubscriber<T> where T : struct
     {
-        public event EventHandler<PowerMonitoring.DataSource.Common.Intefaces.DataUpdatedEventArgs<T>> DataUpdated;
+        public event EventHandler<Common.Intefaces.DataUpdatedEventArgs<T>> DataUpdated;
+        public void OnDataUpdated(Common.Intefaces.DataUpdatedEventArgs<T> e)
+        {
+            EventHandler<Common.Intefaces.DataUpdatedEventArgs<T>> handler = DataUpdated;
+            if (handler != null) handler(this, e);
+        }
+
         public event EventHandler<AsyncCompletedEventArgs> ConnectCompleted;
-            
+        public void OnConnectCompleted(AsyncCompletedEventArgs e)
+        {
+            EventHandler<AsyncCompletedEventArgs> handler = ConnectCompleted;
+            if (handler != null) handler(this, e);
+        }
+
         private readonly NetworkVariableSubscriber<T> _networkVariableSubscriber;
 
         public NationalInstrumentsSubscriber(string location)
@@ -24,15 +35,15 @@ namespace PowerMonitoring.DataSource.MeasurementStudio
             _networkVariableSubscriber.ConnectAsync();
         }
 
-        private void NetworkVariableSubscriberDataUpdated(object sender, global::NationalInstruments.NetworkVariable.DataUpdatedEventArgs<T> e)
+        private void NetworkVariableSubscriberDataUpdated(object sender, NationalInstruments.NetworkVariable.DataUpdatedEventArgs<T> e)
         {
-            var eventArgs = new PowerMonitoring.DataSource.Common.Intefaces.DataUpdatedEventArgs<T>(new NationalInstrumentsData<T>(e.Data));
-            DataUpdated(this, eventArgs);
+            var eventArgs = new Common.Intefaces.DataUpdatedEventArgs<T>(new NationalInstrumentsData<T>(e.Data));
+            OnDataUpdated(eventArgs);
         }
 
         private void SubscriberConnectCompleted(object sender, AsyncCompletedEventArgs e)
         {
-            ConnectCompleted(this, e);
+            OnConnectCompleted(e);
         }
     }
 }
