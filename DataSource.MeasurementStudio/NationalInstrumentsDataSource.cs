@@ -26,10 +26,10 @@ namespace PowerMonitoring.DataSource.MeasurementStudio
             if (handler != null) handler(sender, e);
         }
 
-        readonly ObservableCollection<object> _subscribers;
+        readonly ObservableCollection<IObservableSubscriberBase> _subscribers;
         readonly Browser _browser;
 
-        public NationalInstrumentsDataSource(ObservableCollection<object> subscribers)
+        public NationalInstrumentsDataSource(ObservableCollection<IObservableSubscriberBase> subscribers)
         {
             _subscribers = subscribers;
             _browser = new Browser();
@@ -137,9 +137,9 @@ namespace PowerMonitoring.DataSource.MeasurementStudio
             if (handler != null) handler(sender, e);
         }
 
-        readonly ObservableCollection<object> _subscribers;
+        readonly ObservableCollection<IObservableSubscriberBase> _subscribers;
         readonly Browser _browser;
-        public NationalInstrumentsDataSource(ObservableCollection<object> subscribers)
+        public NationalInstrumentsDataSource(ObservableCollection<IObservableSubscriberBase> subscribers)
         {
             _subscribers = subscribers;
             _browser = new Browser();

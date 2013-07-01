@@ -8,7 +8,7 @@ namespace PowerMonitoring.DataSource.Simulator
 {
     public class SimulatedDataSource<T> : IDataSource<T> where T : struct
     {
-        private readonly ObservableCollection<object> _observableSubscribers;
+        private readonly ObservableCollection<IObservableSubscriberBase> _observableSubscribers;
         public event EventHandler<MessageEventArgs> Massage;
 
         public void OnMassage(MessageEventArgs e)
@@ -24,7 +24,7 @@ namespace PowerMonitoring.DataSource.Simulator
             if (handler != null) handler(sender, e);
         }
 
-        public SimulatedDataSource(ObservableCollection<object> observableSubscribers)
+        public SimulatedDataSource(ObservableCollection<IObservableSubscriberBase> observableSubscribers)
         {
             _observableSubscribers = observableSubscribers;
         }

@@ -13,7 +13,7 @@ namespace Publisher
         private const string ProcessLocationLocal = @"\\localhost\Jure";
 
         readonly ServiceReference.ServiceClient _svc = new ServiceReference.ServiceClient();
-        readonly ObservableCollection<object> _subscribers = new ObservableCollection<object>();
+        private readonly ObservableCollection<IObservableSubscriberBase> _subscribers = new ObservableCollection<IObservableSubscriberBase>();
         private readonly NationalInstrumentsDataSource<double> _dataSource;
         private readonly NationalInstrumentsDataSource _data;
         private readonly SimulatedDataSource<int> _simulatedDataSource;
