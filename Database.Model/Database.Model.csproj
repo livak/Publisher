@@ -49,42 +49,68 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlarmConfigSet.cs">
-      <DependentUpon>PowerLogDBModel.tt</DependentUpon>
+      <DependentUpon>PowerLogDBModel.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AlarmConfigSet_Mapping.cs">
+      <DependentUpon>PowerLogDBModel.Mapping.tt</DependentUpon>
     </Compile>
     <Compile Include="AlarmLogSet.cs">
-      <DependentUpon>PowerLogDBModel.tt</DependentUpon>
+      <DependentUpon>PowerLogDBModel.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AlarmLogSet_Mapping.cs">
+      <DependentUpon>PowerLogDBModel.Mapping.tt</DependentUpon>
     </Compile>
     <Compile Include="AlarmTerminalSet.cs">
-      <DependentUpon>PowerLogDBModel.tt</DependentUpon>
+      <DependentUpon>PowerLogDBModel.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AlarmTerminalSet_Mapping.cs">
+      <DependentUpon>PowerLogDBModel.Mapping.tt</DependentUpon>
     </Compile>
     <Compile Include="DoubleLogSet.cs">
-      <DependentUpon>PowerLogDBModel.tt</DependentUpon>
+      <DependentUpon>PowerLogDBModel.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DoubleLogSet_Mapping.cs">
+      <DependentUpon>PowerLogDBModel.Mapping.tt</DependentUpon>
     </Compile>
     <Compile Include="PowerLogDBModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PowerLogDBModel.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="PowerLogDBModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PowerLogDBModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="PowerLogDBModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PowerLogDBModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="PowerLogDBModel.Entities.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PowerLogDBModel.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PowerLogDBModel.Mapping.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PowerLogDBModel.Mapping.tt</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SingleHistogramSet.cs">
-      <DependentUpon>PowerLogDBModel.tt</DependentUpon>
+      <DependentUpon>PowerLogDBModel.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SingleHistogramSet_Mapping.cs">
+      <DependentUpon>PowerLogDBModel.Mapping.tt</DependentUpon>
     </Compile>
     <Compile Include="SingleLogSet.cs">
-      <DependentUpon>PowerLogDBModel.tt</DependentUpon>
+      <DependentUpon>PowerLogDBModel.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SingleLogSet_Mapping.cs">
+      <DependentUpon>PowerLogDBModel.Mapping.tt</DependentUpon>
     </Compile>
     <Compile Include="VariableSet.cs">
-      <DependentUpon>PowerLogDBModel.tt</DependentUpon>
+      <DependentUpon>PowerLogDBModel.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VariableSet_Mapping.cs">
+      <DependentUpon>PowerLogDBModel.Mapping.tt</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -102,10 +128,15 @@
     <None Include="PowerLogDBModel.edmx.diagram">
       <DependentUpon>PowerLogDBModel.edmx</DependentUpon>
     </None>
-    <None Include="PowerLogDBModel.tt">
+    <None Include="PowerLogDBModel.Entities.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>PowerLogDBModel.Entities.cs</LastGenOutput>
       <DependentUpon>PowerLogDBModel.edmx</DependentUpon>
-      <LastGenOutput>PowerLogDBModel.cs</LastGenOutput>
+    </None>
+    <None Include="PowerLogDBModel.Mapping.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>PowerLogDBModel.Mapping.cs</LastGenOutput>
+      <DependentUpon>PowerLogDBModel.edmx</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -6,25 +6,51 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-
+#pragma warning disable 1573
 namespace Database.Model
 {
     using System;
+    using System.Data.Common;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
     public partial class PowerLogDBEntities : DbContext
     {
-        public PowerLogDBEntities()
-            : base("name=PowerLogDBEntities")
+        static PowerLogDBEntities()
+    	{ 
+    		Database.SetInitializer<PowerLogDBEntities>(null);
+    	}
+    	
+    	public PowerLogDBEntities() : base("name=PowerLogDBEntities")
         {
         }
+    	
+    	public PowerLogDBEntities(string nameOrConnectionString) : base(nameOrConnectionString)
+    	{	
+    	}
     
+    	public PowerLogDBEntities(string nameOrConnectionString, DbCompiledModel model) : base(nameOrConnectionString, model)
+    	{
+    	}
+    
+    	public PowerLogDBEntities(DbConnection existingConnection, bool contextOwnsConnection) : base(existingConnection, contextOwnsConnection)
+    	{
+    	}
+    
+    	public PowerLogDBEntities(DbConnection existingConnection, DbCompiledModel model, bool contextOwnsConnection) : base(existingConnection, model, contextOwnsConnection)
+    	{
+    	}
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            throw new UnintentionalCodeFirstException();
+        {		
+    		modelBuilder.Configurations.Add(new AlarmConfigSet_Mapping());
+    		modelBuilder.Configurations.Add(new AlarmLogSet_Mapping());
+    		modelBuilder.Configurations.Add(new AlarmTerminalSet_Mapping());
+    		modelBuilder.Configurations.Add(new DoubleLogSet_Mapping());
+    		modelBuilder.Configurations.Add(new SingleHistogramSet_Mapping());
+    		modelBuilder.Configurations.Add(new SingleLogSet_Mapping());
+    		modelBuilder.Configurations.Add(new VariableSet_Mapping());
         }
-    
+    	
         public DbSet<AlarmConfigSet> AlarmConfigSets { get; set; }
         public DbSet<AlarmLogSet> AlarmLogSets { get; set; }
         public DbSet<AlarmTerminalSet> AlarmTerminalSets { get; set; }
