@@ -8,13 +8,9 @@ namespace PowerMonitoring.DataAccess.Mapping
         public AlarmLogSetMapping()
         {
             HasKey(t => t.Id);
-            ToTable("AlarmLogSet");
-            Property(t => t.Id).HasColumnName("Id");
-            Property(t => t.AlarmLevelName).HasColumnName("AlarmLevelName").IsRequired();
-            Property(t => t.Action).HasColumnName("Action").IsRequired();
-            Property(t => t.TimeStamp).HasColumnName("TimeStamp");
-            Property(t => t.AlarmConfigId).HasColumnName("AlarmConfigId");
-            Property(t => t.CurrentValue).HasColumnName("CurrentValue").IsRequired();
+            Property(t => t.AlarmLevelName).IsRequired();
+            Property(t => t.Action).IsRequired();
+            Property(t => t.CurrentValue).IsRequired();
             HasRequired(t => t.AlarmConfigSet).WithMany(t => t.AlarmLogSets).HasForeignKey(d => d.AlarmConfigId);
         }
     }
