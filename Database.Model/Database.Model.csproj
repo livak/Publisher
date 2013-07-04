@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1558AC83-C2B7-4A17-853F-EAB4703553C4}</ProjectGuid>
+    <ProjectGuid>{EB1F86D7-C358-4379-AD7B-9E6456869A5C}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Database.Model</RootNamespace>
@@ -33,18 +33,18 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.0.0-beta1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.0.0-beta1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -76,6 +76,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PowerLogDBModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PowerLogDBModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PowerLogDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="PowerLogDBModel.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -137,6 +142,11 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>PowerLogDBModel.Mapping.cs</LastGenOutput>
       <DependentUpon>PowerLogDBModel.edmx</DependentUpon>
+    </None>
+    <None Include="PowerLogDBModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>PowerLogDBModel.edmx</DependentUpon>
+      <LastGenOutput>PowerLogDBModel.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
