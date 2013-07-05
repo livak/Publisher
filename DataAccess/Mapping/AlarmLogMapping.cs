@@ -3,15 +3,14 @@ using PowerMonitoring.Data;
 
 namespace PowerMonitoring.DataAccess.Mapping
 {
-    internal class AlarmLogSetMapping : EntityTypeConfiguration<AlarmLogSet>
+    internal class AlarmLogMapping : EntityTypeConfiguration<AlarmLog>
     {
-        public AlarmLogSetMapping()
+        public AlarmLogMapping()
         {
-            HasKey(t => t.Id);
             Property(t => t.AlarmLevelName).IsRequired();
             Property(t => t.Action).IsRequired();
             Property(t => t.CurrentValue).IsRequired();
-            HasRequired(t => t.AlarmConfigSet).WithMany(t => t.AlarmLogSets).HasForeignKey(d => d.AlarmConfigId);
+            HasRequired(t => t.AlarmConfiguration).WithMany(t => t.AlarmLogs).HasForeignKey(d => d.VariableId);
         }
     }
 }

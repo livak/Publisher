@@ -13,9 +13,9 @@ namespace PowerMonitoring.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class AlarmTerminalSet
+    public partial class Alarm
     {
-        public int Id { get; set; }
+        public int AlarmId { get; set; }
         public bool Active { get; set; }
         public bool Acknowledged { get; set; }
         public string AlarmLevelName { get; set; }
@@ -25,8 +25,8 @@ namespace PowerMonitoring.Data
         public Nullable<System.DateTime> DeactivatedTime { get; set; }
         public double SetPoint { get; set; }
         public int Priority { get; set; }
-        public int AlarmConfig_Id { get; set; }
-    
-        public virtual AlarmConfigSet AlarmConfigSet { get; set; }
+        public int VariableId { get; set; }
+
+        public virtual AlarmConfiguration AlarmConfiguration { get; set; }
     }
 }

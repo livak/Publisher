@@ -3,11 +3,10 @@ using PowerMonitoring.Data;
 
 namespace PowerMonitoring.DataAccess.Mapping
 {
-    internal class VariableSetMapping : EntityTypeConfiguration<VariableSet>
+    internal class VariableMapping : EntityTypeConfiguration<Variable>
     {
-        public VariableSetMapping()
+        public VariableMapping()
         {
-            HasKey(t => t.Id);
             Property(t => t.Name).IsRequired();
             Property(t => t.Type).IsRequired();
         }

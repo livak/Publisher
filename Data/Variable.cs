@@ -13,23 +13,23 @@ namespace PowerMonitoring.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class VariableSet
+    public partial class Variable
     {
-        public VariableSet()
+        public Variable()
         {
-            this.DoubleLogSets = new HashSet<DoubleLogSet>();
-            this.SingleHistogramSets = new HashSet<SingleHistogramSet>();
-            this.SingleLogSets = new HashSet<SingleLogSet>();
+            this.DoubleLogs = new HashSet<DoubleLog>();
+            this.SingleHistograms = new HashSet<SingleHistogram>();
+            this.SingleLogs = new HashSet<SingleLog>();
         }
-    
-        public int Id { get; set; }
+
+        public int VariableId { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }
         public bool DataLoggingEnabled { get; set; }
-    
-        public virtual AlarmConfigSet AlarmConfigSet { get; set; }
-        public virtual ICollection<DoubleLogSet> DoubleLogSets { get; set; }
-        public virtual ICollection<SingleHistogramSet> SingleHistogramSets { get; set; }
-        public virtual ICollection<SingleLogSet> SingleLogSets { get; set; }
+
+        public virtual AlarmConfiguration AlarmConfiguration { get; set; }
+        public virtual ICollection<DoubleLog> DoubleLogs { get; set; }
+        public virtual ICollection<SingleHistogram> SingleHistograms { get; set; }
+        public virtual ICollection<SingleLog> SingleLogs { get; set; }
     }
 }

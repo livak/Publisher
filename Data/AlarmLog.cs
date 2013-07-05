@@ -13,13 +13,15 @@ namespace PowerMonitoring.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class SingleLogSet
+    public partial class AlarmLog
     {
-        public int Id { get; set; }
-        public float SingleValue { get; set; }
+        public int AlarmLogId { get; set; }
+        public string AlarmLevelName { get; set; }
+        public string Action { get; set; }
         public System.DateTime TimeStamp { get; set; }
         public int VariableId { get; set; }
-    
-        public virtual VariableSet VariableSet { get; set; }
+        public string CurrentValue { get; set; }
+
+        public virtual AlarmConfiguration AlarmConfiguration { get; set; }
     }
 }

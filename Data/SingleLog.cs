@@ -13,13 +13,13 @@ namespace PowerMonitoring.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class SingleHistogramSet
+    public partial class SingleLog
     {
-        public int Id { get; set; }
+        public int SingleLogId { get; set; }
         public float SingleValue { get; set; }
         public System.DateTime TimeStamp { get; set; }
         public int VariableId { get; set; }
     
-        public virtual VariableSet VariableSet { get; set; }
+        public virtual Variable Variable { get; set; }
     }
 }

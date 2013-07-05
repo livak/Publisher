@@ -13,13 +13,13 @@ namespace PowerMonitoring.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class DoubleLogSet
+    public partial class DoubleLog
     {
-        public int Id { get; set; }
+        public int DoubleLogId { get; set; }
         public double DoubleValue { get; set; }
         public System.DateTime TimeStamp { get; set; }
         public int VariableId { get; set; }
-    
-        public virtual VariableSet VariableSet { get; set; }
+
+        public virtual Variable Variable { get; set; }
     }
 }

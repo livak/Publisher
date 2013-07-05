@@ -39,13 +39,29 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Mapping\AlamLevelConfigurationMapping.cs" />
+    <Compile Include="Mapping\AlarmConfigurationMapping.cs" />
+    <Compile Include="Mapping\AlarmLogMapping.cs" />
+    <Compile Include="Mapping\AlarmMapping.cs" />
+    <Compile Include="Mapping\DoubleLogMapping.cs" />
+    <Compile Include="Mapping\SingleHistogramMapping.cs" />
+    <Compile Include="Mapping\SingleLogMapping.cs" />
+    <Compile Include="Mapping\VariableMapping.cs" />
+    <Compile Include="PowerLogDBContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Data\Data.csproj">
+      <Project>{f96ece56-e75e-4610-a482-ae2dbb63614e}</Project>
+      <Name>Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
