@@ -9,10 +9,9 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using PowerMonitoring.Data.Dto;
-using PowerMonitoring.Data.Poco;
+using PowerMonitoring.Data;
 
-namespace PowerMonitoring.Data.Assemblers
+namespace PowerMonitoring.Data
 {
 
     /// <summary>

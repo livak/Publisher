@@ -2,7 +2,6 @@
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using PowerMonitoring.Data;
-using PowerMonitoring.Data.Poco;
 using PowerMonitoring.DataAccess.Mapping;
 
 namespace PowerMonitoring.DataAccess.Initialization

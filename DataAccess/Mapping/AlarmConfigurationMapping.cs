@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using PowerMonitoring.Data;
-using PowerMonitoring.Data.Poco;
 
 namespace PowerMonitoring.DataAccess.Mapping
 {

@@ -9,7 +9,7 @@
 
 using System;
 
-namespace PowerMonitoring.Data.Poco
+namespace PowerMonitoring.Data
 {
     #pragma warning disable 1573
     

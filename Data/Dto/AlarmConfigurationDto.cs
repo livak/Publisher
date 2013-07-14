@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace PowerMonitoring.Data.Dto
+namespace PowerMonitoring.Data
 {
     [DataContract()]
     public partial class AlarmConfigurationDto

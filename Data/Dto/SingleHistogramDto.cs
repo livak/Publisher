@@ -10,7 +10,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace PowerMonitoring.Data.Dto
+namespace PowerMonitoring.Data
 {
     [DataContract()]
     public partial class SingleHistogramDto
