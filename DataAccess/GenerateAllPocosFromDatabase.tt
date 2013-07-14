@@ -1,0 +1,51 @@
+﻿<#@ template language="C#" debug="True" #>
+<#@ assembly name="System.Data" #>
+<#@ assembly name="C:\Users\Jure\Documents\GitHub\Publisher\DataAccess\bin\Debug\PowerMonitoring.Data.dll" #>
+
+<#@ assembly name="System.Xml" #>
+<#@ import namespace="System.Reflection" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="PowerMonitoring.Data" #>
+using System;
+using PowerMonitoring.Data;
+
+namespace Entities 
+{   
+  class pero
+  {
+      public pero()
+        {
+<#    var type= typeof(SingleLog);
+    #>
+    var <#= type.Name.ToLower() #> = new <#=        type.Name #>
+    {    
+<#    foreach (var prop in type.GetProperties())
+    {#>
+         <#=prop.Name #>= <#=            GetNetDataType(prop.PropertyType) #>,
+<#    }#>
+    };
+}}
+}
+
+
+
+<#+
+    public static string GetNetDataType(Type propType)
+    {
+        switch (propType.Name)
+        {
+            case "String":
+                return @"""1""";
+            case "Int32":
+                return "1";            
+            case "Double":
+                return "1";            
+            case "Single":
+                return "1";
+            case "Boolean":
+                return "true";
+            default:
+                return "new " + propType.Name + "()";
+        }
+    }
+#>
