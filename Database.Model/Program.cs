@@ -1,5 +1,6 @@
 ﻿using System;
 using PowerMonitoring.Data;
+using PowerMonitoring.Data.Poco;
 using PowerMonitoring.DataAccess.Repository;
 
 namespace Database.Model
@@ -52,7 +53,7 @@ namespace Database.Model
 
             //var varfromDB = variableRepo.Insert(variable, true);
 
-            var varfromDB = variableRepo.Context.Variables.Find(8);
+            var varfromDb = variableRepo.Context.Variables.Find(8);
 
         }
     }

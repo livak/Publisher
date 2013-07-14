@@ -2,13 +2,14 @@
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using PowerMonitoring.Data;
+using PowerMonitoring.Data.Poco;
 using PowerMonitoring.DataAccess.Mapping;
 
 namespace PowerMonitoring.DataAccess.Initialization
 {
     public class PowerLogDbContext : DbContext
     {
-        private const string ConnectionString = @"Data Source=jure-pc\sqlexpress;Initial Catalog=Logging2;persist security info=True; Integrated Security=SSPI;;Application Name=EntityFramework";
+        private const string ConnectionString = @"Data Source=jure-pc\sqlexpress;Initial Catalog=CodeFirstDb;persist security info=True; Integrated Security=SSPI;;Application Name=EntityFramework";
 
         //todo - comment http://stackoverflow.com/questions/14985854/ef-code-first-creating-database-login-failed-for-user/14987845#14987845
         //for reverse code first

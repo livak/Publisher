@@ -7,19 +7,17 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PowerMonitoring.Data
+namespace PowerMonitoring.Data.Poco
 {
     #pragma warning disable 1573
-    using System;
-    using System.Collections.Generic;
     
-    public partial class SingleLog
+    public partial class SingleHistogram
     {
-        public int SingleLogId { get; set; }
+        public int SingleHistogramId { get; set; }
         public float SingleValue { get; set; }
         public System.DateTime TimeStamp { get; set; }
         public int VariableId { get; set; }
-    
+
         public virtual Variable Variable { get; set; }
     }
 }

@@ -7,11 +7,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PowerMonitoring.Data
+namespace PowerMonitoring.Data.Poco
 {
     #pragma warning disable 1573
-    using System;
-    using System.Collections.Generic;
     
     public partial class DoubleLog
     {

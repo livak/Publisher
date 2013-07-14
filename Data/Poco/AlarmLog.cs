@@ -7,25 +7,18 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PowerMonitoring.Data
+namespace PowerMonitoring.Data.Poco
 {
     #pragma warning disable 1573
-    using System;
-    using System.Collections.Generic;
     
-    public partial class Alarm
+    public partial class AlarmLog
     {
-        public int AlarmId { get; set; }
-        public bool Active { get; set; }
-        public bool Acknowledged { get; set; }
+        public int AlarmLogId { get; set; }
         public string AlarmLevelName { get; set; }
-        public float MaxValue { get; set; }
-        public System.DateTime SetTime { get; set; }
-        public System.DateTime MaxValueTime { get; set; }
-        public Nullable<System.DateTime> DeactivatedTime { get; set; }
-        public double SetPoint { get; set; }
-        public int Priority { get; set; }
+        public string Action { get; set; }
+        public System.DateTime TimeStamp { get; set; }
         public int VariableId { get; set; }
+        public string CurrentValue { get; set; }
 
         public virtual AlarmConfiguration AlarmConfiguration { get; set; }
     }

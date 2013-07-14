@@ -1,4 +1,4 @@
-﻿namespace PowerMonitoring.Data
+﻿namespace PowerMonitoring.Data.Poco
 {
     public class AlarmLevelConfiguration
     {
