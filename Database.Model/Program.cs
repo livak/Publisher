@@ -1,5 +1,5 @@
 ﻿using PowerMonitoring.Data;
-using PowerMonitoring.DataAccess.Repository;
+using PowerMonitoring.DataAccess.Repository.Dto;
 
 namespace Database.Model
 {
@@ -8,7 +8,7 @@ namespace Database.Model
         static void Main(string[] args)
         {
 
-            var variableRepo = new VariableRepository();
+            var variableRepo = new VariableDtoRepository();
             var variable = new VariableDto
                                {
                                    Name = "dto",
@@ -16,7 +16,7 @@ namespace Database.Model
                                    DataLoggingEnabled = true,
                                };
 
-            var varfromDB = variableRepo.Insert(variable.ToEntity(), true);
+            var varfromDB = variableRepo.Insert(variable, true);
 
             var varfromDb = variableRepo.Context.Variables.Find(8);
 

@@ -59,6 +59,13 @@
     <Compile Include="Repository\AlarmLogRepository.cs" />
     <Compile Include="Repository\AlarmRepository.cs" />
     <Compile Include="Repository\DoubleLogRepository.cs" />
+    <Compile Include="Repository\Dto\AlarmConfigurationDtoRepository.cs" />
+    <Compile Include="Repository\Dto\AlarmDtoRepository.cs" />
+    <Compile Include="Repository\Dto\AlarmLogDtoRepository.cs" />
+    <Compile Include="Repository\Dto\DoubleLogDtoRepository.cs" />
+    <Compile Include="Repository\Dto\SingleHistogramDtoRepository.cs" />
+    <Compile Include="Repository\Dto\SingleLogDtoRepository.cs" />
+    <Compile Include="Repository\Dto\VariableDtoRepository.cs" />
     <Compile Include="Repository\SingleHistogramRepository.cs" />
     <Compile Include="Repository\SingleLogRepository.cs" />
     <Compile Include="Repository\VariableRepository.cs" />

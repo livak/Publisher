@@ -34,12 +34,25 @@ namespace PowerMonitoring.DataAccess.Componenets
 
         private T Operation(T item, EntityState entityState, bool saveNow)
         {
-            Context.Entry(item).State = entityState;
+            object poco = ConvertToPoco(item);
+
+            Context.Entry(poco).State = entityState;
             if (saveNow)
             {
                 Context.SaveChanges();
             }
-            return item;
+
+            return ConvertToDto(poco) as T;
+        }
+
+        public virtual object ConvertToPoco(T dto)
+        {
+            return dto;
+        }
+
+        public virtual object ConvertToDto(object entity)
+        {
+            return entity;
         }
 
         public bool Save()
