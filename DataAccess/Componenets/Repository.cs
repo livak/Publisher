@@ -32,6 +32,12 @@ namespace PowerMonitoring.DataAccess.Componenets
             return Operation(item, EntityState.Deleted, saveNow);
         }
 
+        public T GetById(int id)
+        {
+            Type typeOfPoco = GetTypeOfPoco();
+            return ConvertToDto(Context.Set(typeOfPoco).Find(id)) as T;
+        }
+
         private T Operation(T item, EntityState entityState, bool saveNow)
         {
             object poco = ConvertToPoco(item);
@@ -53,6 +59,11 @@ namespace PowerMonitoring.DataAccess.Componenets
         public virtual object ConvertToDto(object entity)
         {
             return entity;
+        }
+
+        public virtual Type GetTypeOfPoco()
+        {
+            return typeof (T);
         }
 
         public bool Save()

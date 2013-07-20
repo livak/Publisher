@@ -15,5 +15,10 @@ namespace PowerMonitoring.DataAccess.Repository.Dto
         {
             return ((DoubleLog) entity).ToDTO();
         }
+
+        public override System.Type GetTypeOfPoco()
+        {
+            return typeof(DoubleLog);
+        }
     }
 }

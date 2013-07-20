@@ -1,3 +1,4 @@
+using System;
 using PowerMonitoring.Data;
 using PowerMonitoring.DataAccess.Componenets;
 using PowerMonitoring.DataAccess.Initialization;
@@ -14,6 +15,11 @@ namespace PowerMonitoring.DataAccess.Repository.Dto
         public override object ConvertToDto(object entity)
         {
             return ((AlarmConfiguration) entity).ToDTO();
+        }
+
+        public override Type GetTypeOfPoco()
+        {
+            return typeof (AlarmConfiguration);
         }
     }
 }

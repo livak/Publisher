@@ -15,5 +15,10 @@ namespace PowerMonitoring.DataAccess.Repository.Dto
         {
             return ((Variable) entity).ToDTO();
         }
+
+        public override System.Type GetTypeOfPoco()
+        {
+            return typeof (Variable);
+        }
     }
 }

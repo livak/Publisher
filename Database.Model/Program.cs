@@ -16,8 +16,11 @@ namespace Database.Model
                                    DataLoggingEnabled = true,
                                };
 
+
+
             var varfromDB = variableRepo.Insert(variable, true);
 
+            var variaabla=variableRepo.GetById(2);
             var varfromDb = variableRepo.Context.Variables.Find(8);
 
         }
